@@ -1,0 +1,10 @@
+ffuf -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -u https://celo.org/FUZZ
+ffuf -w /usr/share/wordlists/dirb/common.txt -u https://av.ru//FUZZ
+
+
+
+
+ffff
+ffuf -w ~/wordlists/discovery/raft-large-directories.txt -u https://www.avrotros.nl/FUZZ
+ffuf -w ~/wordlists/discovery/raft-large-directories.txt -u https://www.avrotros.nl/FUZZ -fc 200
+

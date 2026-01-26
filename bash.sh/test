@@ -1,0 +1,60 @@
+#!/bin/bash 
+
+target=$1
+cd ~/bugbounty2021
+echo "------------creating directory ----------------------"
+mkdir ~/bugbounty2021/$1
+figlet Kill to Hand
+echo "------------doing subenum------------------"
+subfinder -d $1 | tee  ~/bugbounty2021/$1/subfinder.txt
+echo "----------------doing nuclei ------------------------"
+httpx -l ~/bugbounty2021/$1/subfinder.txt -o ~/bugbounty2021/$1/urlsubdomain.txt
+cat ~/bugbounty2021/$1/urlsubdomain.txt | httpx -web-server -o ~/bugbounty2021/$1/version.txt
+cat  ~/bugbounty2021/$1/urlsubdomain.txt | nuclei -t  ~/nuclei-templates/ -o ~/bugbounty2021/$1/nuclei_bug.txt 
+
+cat  ~/bugbounty2021/$1/urlsubdomain.txt | waybackurls &gt; ~/bugbounty2021/$1/wayback.txt
+cat ~/bugbounty2021/$1/wayback.txt | grep "=" &gt; ~/bugbounty2021/$1/param.txt
+cat ~/bugbounty2021/$1/param.txt | dalfox pipe
+
+
+
+
+#httpx -l ~/bugbounty2021/$1/sublist3r.txt -o ~/bugbounty2021/$1/urlsubdomain.txt
+
+#echo "----------------doing nuclei ------------------------"
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | nuclei -t  ~/nuclei-templates/ -o ~/bugbounty2021/$1/nuclei_bug.txt
+#echo "----------------subdomain takeover ------------------------"
+#subzy -targets ~/bugbounty2021/$1/urlsubdomain.txt | tee  ~/bugbounty2021/$1/subtakeover.txt
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | waybackurls | httpx --status-code ~/bugbounty2021/$1/wayback.txt
+#cd ~/ParamSpider
+#python3 paramspider.py -d $1 | tee  ~/bugbounty2021/$1/peramiter.txt
+#echo "---------------- Runing gf tool ------------------------"
+#gf xss ~/bugbounty2021/$1/peramiter.txt | tee  ~/bugbounty2021/$1/gfperamiter.txt
+#gf sqli ~/bugbounty2021/$1/peramiter.txt | tee  ~/bugbounty2021/$1/gfsperamiter.txt
+#echo "---------------- Dalfox tool ------------------------"
+#cat ~/bugbounty2021/$1/gfperamiter.txt | dalfox pipe
+#cat ~/bugbounty2021/$1/gfsperamiter.txt | dalfox pipe
+
+
+
+
+
+
+
+
+#!/bin/bash 
+
+#target=$1
+#cd ~/bugbounty2021
+#echo "------------creating directory ----------------------"
+#mkdir ~/bugbounty2021/$1
+#echo "doing subenum"
+#subfinder -d $1 | tee  ~/bugbounty2021/$1/subfinder.txt
+#echo "----------------doing nuclei ------------------------"
+#httpx -l ~/bugbounty2021/$1/subfinder.txt -o ~/bugbounty2021/$1/urlsubdomain.txt
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | nuclei -t  ~/nuclei-templates/ -o ~/bugbounty2021/$1/nuclei_bug.txt 
+
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | waybackurls &gt; ~/bugbounty2021/$1/wayback.txt
+#cat ~/bugbounty2021/$1/wayback.txt | grep "=" &gt; ~/bugbounty2021/$1/param.txt
+#cat ~/bugbounty2021/$1/param.txt | dalfox pipe
+

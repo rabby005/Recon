@@ -1,0 +1,11 @@
+#!/bin/bash 
+
+target=$1
+cd ~/SQL2021
+echo "------------creating directory ----------------------"
+mkdir ~/SQL2021/$1
+waybackurls $1 ~/SQL2021/$1/waybackurls.txt
+#cd ~/ParamSpider
+#python3 paramspider.py -d $1 | tee  ~/SQL2021/$1/peramiter.txt
+gf sqli  ~/bugbounty2021/$1/waybackurls.txt  | tee  ~/SQL2021/$1/gfperamiter.txt
+#gf sqli ~/SQL2021/$1/peramiter.txt | tee  ~/SQL2021/$1/gfperamiter.txt

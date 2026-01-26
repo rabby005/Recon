@@ -1,0 +1,50 @@
+#!/bin/bash 
+
+target=$1
+cd ~/bugbounty2021
+echo "------------creating directory ----------------------"
+mkdir ~/bugbounty2021/$1
+
+echo "--------------------------------- RICON --------------------------------"
+#cd ~/knock
+#python3 knockpy.py $1 | tee  ~/bugbounty2021/$1/KNOCK.txt
+echo "-----------Find subdomain------------"
+cd ~/Sublist3r
+python3 sublist3r.py -d $1 -o ~/bugbounty2021/$1/allsubdomain.txt
+echo "-----------------------Cheack 20 port-----------------"
+naabu -p 20 -list ~/bugbounty2021/$1/allsubdomain.txt | tee  ~/bugbounty2021/$1/20port.txt
+echo "-----------------------Cheack 21 port-----------------"
+naabu -p 21 -list ~/bugbounty2021/$1/allsubdomain.txt | tee  ~/bugbounty2021/$1/21port.txt
+echo "---------------- CHEACK CLOUDFAIF ------------------------"
+cf-check -d ~/bugbounty2021/$1/allsubdomain.txt | tee  ~/bugbounty2021/$1/subdomain.txt
+
+echo "----------------doing subfinder ------------------------"
+subfinder -d $1 | tee  ~/bugbounty2021/$1/subfinder.txt
+httpx -l ~/bugbounty2021/$1/allsubdomain.txt -o ~/bugbounty2021/$1/urlsubdomain.txt
+#cat ~/bugbounty2021/$1/urlsubdomain.txt | httpx -web-server -o ~/bugbounty2021/$1/version.txt
+#echo "----------------subdomain takeover ------------------------"
+#subzy -targets ~/bugbounty2021/$1/urlsubdomain.txt | tee  ~/bugbounty2021/$1/subtakeover.txt
+#echo "---------------- WAYBACKURLS ------------------------"
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | waybackurls | tee -a ~/bugbounty2021/$1/wayback.txt
+
+#sort  ~/bugbounty2021/$1/wayback.txt | uniq > ~/bugbounty2021/$1/sortuels.txt
+
+#echo "--------------------XSS peramiter-------------------
+#                              |
+  #                            |
+ #                           "
+#gf xss ~/bugbounty2021/$1/sortuels.txt | tee ~/bugbounty2021/$1/gf-XSS peramiter.txt
+
+#echo "--------------------SQLI peramiter-------------------
+#                              |
+#                              |
+#                              "
+#gf sqli ~/bugbounty2021/$1/sortuels.txt | tee ~/bugbounty2021/$1/gf-sql peramiter.txt
+#echo "--------------------- status-code -----------------"
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | waybackurls | httpx --status-code ~/bugbounty2021/$1/wayback.txt
+#echo "---------------- Dalfox tool ------------------------"
+#cat ~/bugbounty2021/$1/gf-XSS peramiter.txt | dalfox pipe
+
+#echo "----------------doing nuclei ------------------------"
+#cat  ~/bugbounty2021/$1/urlsubdomain.txt | nuclei -t  ~/nuclei-templates/ -o ~/bugbounty2021/$1/nuclei_bug.txt
+#mdtamim)!#!%#(#$#

@@ -1,0 +1,1 @@
+bash toole file scan korar code : for i in $(cat test.txt);do ./faraby $i;done

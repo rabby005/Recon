@@ -1,0 +1,3 @@
+#!/bin/bash
+cd ~/waterfox-G3/waterfox
+./waterfox

@@ -1,0 +1,1 @@
+puredns bruteforce ~/wordlists/subdomains-top1mil-110000.txt enovationgroup.com -r ~/wordlists/resolvers.txt -w ~/bugbounty2021/puresubdomain.txt

