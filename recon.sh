@@ -21,11 +21,11 @@ cat  ~/bugbounty2022/$1/Subdomain.txt | waybackurls | tee -a ~/bugbounty2022/$1/
 cat ~/bugbounty2022/$1/wayback.txt | grep ".php" > ~/bugbounty2022/$1/php-file.txt
 echo "-----------Finish subdomain------------"
 
-#                               |
+                              |
 
-#                               |
+                              |
 
-#echo "-----------------------I____M_____P Urls-----------------"
+echo "-----------------------I____M_____P Urls-----------------"
 #cat ~/bugbounty2022/$1/Subdomain.txt | hakrawler | tee ~/bugbounty2022/$1/IMP urls.txt
 #cat ~/bugbounty2022/$1/Subdomain.txt | hakrawler | tee ~/bugbounty2022/$1/IMP urls.txt
 #cat ~/bugbounty2022/$1/IMP urls.txt | aquatone | tee ~/bugbounty2022/$1/Scrensorturls.txt
