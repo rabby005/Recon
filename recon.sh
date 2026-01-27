@@ -29,7 +29,7 @@ echo "-----------------------I____M_____P Urls-----------------"
 cat ~/bugbounty2022/$1/Subdomain.txt | hakrawler | tee ~/bugbounty2022/$1/IMP urls.txt
 cat ~/bugbounty2022/$1/Subdomain.txt | hakrawler | tee ~/bugbounty2022/$1/IMP urls.txt
 cat ~/bugbounty2022/$1/IMP urls.txt | aquatone | tee ~/bugbounty2022/$1/Scrensorturls.txt
-#cat ~/bugbounty2022/$1/IMP urls.txt | aquatone -out ~/bugbounty2022/$1/Scrensorturls.txt
+cat ~/bugbounty2022/$1/IMP urls.txt | aquatone -out ~/bugbounty2022/$1/Scrensorturls.txt
 
 echo "---------------- CHEACK CLOUDFAIF ------------------------"
 cf-check -d ~/bugbounty2022/$1/Subdomain.txt | tee  ~/bugbounty2022/$1/Cloudfair Subdomain.txt
