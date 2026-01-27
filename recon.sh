@@ -32,7 +32,7 @@ echo "-----------Finish subdomain------------"
 #cat ~/bugbounty2022/$1/IMP urls.txt | aquatone -out ~/bugbounty2022/$1/Scrensorturls.txt
 
 echo "---------------- CHEACK CLOUDFAIF ------------------------"
-#cf-check -d ~/bugbounty2022/$1/Subdomain.txt | tee  ~/bugbounty2022/$1/Cloudfair Subdomain.txt
+cf-check -d ~/bugbounty2022/$1/Subdomain.txt | tee  ~/bugbounty2022/$1/Cloudfair Subdomain.txt
 
 #cat  ~/bugbounty2022/$1/Subdomain.txt | waybackurls | tee -a ~/bugbounty2022/$1/wayback.txt
 
