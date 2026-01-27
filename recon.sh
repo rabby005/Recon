@@ -36,7 +36,7 @@ echo "-----------Finish subdomain------------"
 
 #cat  ~/bugbounty2022/$1/Subdomain.txt | waybackurls | tee -a ~/bugbounty2022/$1/wayback.txt
 
-#echo "--------------------XSS peramiter-------------------"
+echo "--------------------XSS peramiter-------------------"
 
                          |
                          |
