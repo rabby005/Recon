@@ -34,7 +34,7 @@ echo "-----------Finish subdomain------------"
 echo "---------------- CHEACK CLOUDFAIF ------------------------"
 cf-check -d ~/bugbounty2022/$1/Subdomain.txt | tee  ~/bugbounty2022/$1/Cloudfair Subdomain.txt
 
-#cat  ~/bugbounty2022/$1/Subdomain.txt | waybackurls | tee -a ~/bugbounty2022/$1/wayback.txt
+cat  ~/bugbounty2022/$1/Subdomain.txt | waybackurls | tee -a ~/bugbounty2022/$1/wayback.txt
 
 echo "--------------------XSS peramiter-------------------"
 
