@@ -39,7 +39,7 @@ echo "-----------Finish subdomain------------"
 #echo "--------------------XSS peramiter-------------------"
 
 #                          |
-#                          |
+                         |
 
 
 gf xss ~/bugbounty2022/$1/wayback.txt | tee ~/bugbounty2022/$1/gf-XSS peramiter.txt
