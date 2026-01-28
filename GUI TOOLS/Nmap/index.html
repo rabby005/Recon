@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Command Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Spline+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #151922;
+            --bg-tertiary: #1e242e;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #6c5ce7;
+            --accent-tertiary: #00b894;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+            --border-color: #2d3748;
+            --shadow: 0 8px 32px rgba(0, 217, 255, 0.15);
+            --glow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Spline Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(108, 92, 231, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .tab {
+            padding: 1rem 1.25rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: 'Spline Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(108, 92, 231, 0.2));
+            color: var(--accent-primary);
+            box-shadow: var(--glow);
+            transform: translateX(4px);
+        }
+
+        .tab.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 0 2px 2px 0;
+        }
+
+        .content-area {
+            min-height: 600px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInContent 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 2px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 0.875rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(0, 217, 255, 0.05);
+            border-color: var(--accent-primary);
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent-primary);
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 400;
+        }
+
+        .command-output {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid var(--accent-primary);
+            box-shadow: var(--glow);
+            margin-top: 2rem;
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .command-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .copy-btn {
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Spline Sans', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .command-text {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--accent-primary);
+            word-wrap: break-word;
+            border: 1px solid var(--border-color);
+            line-height: 1.6;
+            min-height: 60px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .radio-item:hover {
+            background: rgba(0, 217, 255, 0.05);
+            border-color: var(--accent-primary);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-primary));
+            color: var(--bg-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.4);
+            animation: slideInUp 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 0.5rem;
+            }
+
+            .tab {
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+
+            .tab:hover,
+            .tab.active {
+                transform: none;
+            }
+
+            .tab.active::before {
+                display: none;
+            }
+
+            .tab.active::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40%;
+                height: 2px;
+                background: var(--accent-primary);
+                border-radius: 2px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Nmap Command Builder</h1>
+            <p class="subtitle">Professional Network Scanning Tool with Auto-Generated Commands</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <nav class="tabs">
+                    <button class="tab active" data-tab="target">🎯 Target</button>
+                    <button class="tab" data-tab="discovery">🔍 Discovery</button>
+                    <button class="tab" data-tab="scan">🔬 Scan Type</button>
+                    <button class="tab" data-tab="ports">🔌 Ports</button>
+                    <button class="tab" data-tab="service">⚙️ Service</button>
+                    <button class="tab" data-tab="scripts">📜 Scripts</button>
+                    <button class="tab" data-tab="os">💻 OS Detection</button>
+                    <button class="tab" data-tab="timing">⏱️ Timing</button>
+                    <button class="tab" data-tab="evasion">🛡️ Evasion</button>
+                    <button class="tab" data-tab="output">📄 Output</button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="content-area">
+                <!-- Target Tab -->
+                <div id="target" class="tab-content active">
+                    <div class="section">
+                        <h2 class="section-title">Target Specification</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Target Hosts/Networks</label>
+                                <textarea id="targets" placeholder="e.g., 192.168.1.1, scanme.nmap.org, 10.0.0.0/24"></textarea>
+                                <span class="help-text">Enter hostnames, IPs, or networks (one per line or comma-separated)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Input from File</label>
+                                <input type="text" id="inputFile" placeholder="-iL filename.txt">
+                            </div>
+                            <div class="form-group">
+                                <label>Random Targets</label>
+                                <input type="number" id="randomTargets" placeholder="Number of random hosts">
+                            </div>
+                            <div class="form-group">
+                                <label>Exclude Hosts</label>
+                                <input type="text" id="exclude" placeholder="e.g., 192.168.1.1,192.168.1.5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discovery Tab -->
+                <div id="discovery" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Host Discovery Options</h2>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sL">
+                                <label for="sL">List Scan (-sL)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sn">
+                                <label for="sn">Ping Scan (-sn)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="Pn">
+                                <label for="Pn">No Ping (-Pn)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="PS">
+                                <label for="PS">TCP SYN Discovery (-PS)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="PA">
+                                <label for="PA">TCP ACK Discovery (-PA)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="PU">
+                                <label for="PU">UDP Discovery (-PU)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="PE">
+                                <label for="PE">ICMP Echo (-PE)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="traceroute">
+                                <label for="traceroute">Traceroute (--traceroute)</label>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Discovery Port List</label>
+                                <input type="text" id="discoveryPorts" placeholder="e.g., 80,443,8080">
+                            </div>
+                            <div class="form-group">
+                                <label>DNS Resolution</label>
+                                <select id="dnsResolution">
+                                    <option value="">Default</option>
+                                    <option value="-n">Never (-n)</option>
+                                    <option value="-R">Always (-R)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan Type Tab -->
+                <div id="scan" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Scan Techniques</h2>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sS" value="-sS">
+                                <label for="sS">TCP SYN Scan (-sS)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sT" value="-sT">
+                                <label for="sT">TCP Connect (-sT)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sU" value="-sU">
+                                <label for="sU">UDP Scan (-sU)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sA" value="-sA">
+                                <label for="sA">TCP ACK Scan (-sA)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sN" value="-sN">
+                                <label for="sN">TCP Null Scan (-sN)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sF" value="-sF">
+                                <label for="sF">FIN Scan (-sF)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="scanType" id="sX" value="-sX">
+                                <label for="sX">Xmas Scan (-sX)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ports Tab -->
+                <div id="ports" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Port Specification</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Port Range</label>
+                                <input type="text" id="portRange" placeholder="e.g., 1-1000, 80,443,8080">
+                                <span class="help-text">Specify ports or ranges separated by commas</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Top Ports</label>
+                                <input type="number" id="topPorts" placeholder="e.g., 100">
+                                <span class="help-text">Scan N most common ports</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Exclude Ports</label>
+                                <input type="text" id="excludePorts" placeholder="e.g., 25,135,445">
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fastScan">
+                                <label for="fastScan">Fast Scan (-F)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="allPorts">
+                                <label for="allPorts">All Ports (-p-)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sequential">
+                                <label for="sequential">Sequential (-r)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Tab -->
+                <div id="service" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Service & Version Detection</h2>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sV">
+                                <label for="sV">Version Detection (-sV)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="versionLight">
+                                <label for="versionLight">Light Version (--version-light)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="versionAll">
+                                <label for="versionAll">All Probes (--version-all)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="versionTrace">
+                                <label for="versionTrace">Version Trace (--version-trace)</label>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Version Intensity (0-9)</label>
+                                <input type="number" id="versionIntensity" min="0" max="9" placeholder="Default: 7">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scripts Tab -->
+                <div id="scripts" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">NSE Scripts</h2>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sC">
+                                <label for="sC">Default Scripts (-sC)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="scriptTrace">
+                                <label for="scriptTrace">Script Trace (--script-trace)</label>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Custom Scripts</label>
+                                <input type="text" id="customScripts" placeholder="e.g., http-title,ssl-cert">
+                                <span class="help-text">Comma-separated script names or categories</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Script Arguments</label>
+                                <input type="text" id="scriptArgs" placeholder="e.g., user=admin,pass=test">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OS Detection Tab -->
+                <div id="os" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">OS Detection</h2>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="osDetection">
+                                <label for="osDetection">Enable OS Detection (-O)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="osscanLimit">
+                                <label for="osscanLimit">Limit to Promising (--osscan-limit)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="osscanGuess">
+                                <label for="osscanGuess">Aggressive Guess (--osscan-guess)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="aggressiveScan">
+                                <label for="aggressiveScan">Aggressive Scan (-A)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timing Tab -->
+                <div id="timing" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Timing & Performance</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Timing Template (0-5)</label>
+                                <select id="timingTemplate">
+                                    <option value="">Default</option>
+                                    <option value="-T0">Paranoid (-T0)</option>
+                                    <option value="-T1">Sneaky (-T1)</option>
+                                    <option value="-T2">Polite (-T2)</option>
+                                    <option value="-T3">Normal (-T3)</option>
+                                    <option value="-T4">Aggressive (-T4)</option>
+                                    <option value="-T5">Insane (-T5)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Host Timeout</label>
+                                <input type="text" id="hostTimeout" placeholder="e.g., 30m, 1h">
+                            </div>
+                            <div class="form-group">
+                                <label>Max Retries</label>
+                                <input type="number" id="maxRetries" placeholder="Default: 10">
+                            </div>
+                            <div class="form-group">
+                                <label>Min Rate (packets/sec)</label>
+                                <input type="number" id="minRate" placeholder="e.g., 100">
+                            </div>
+                            <div class="form-group">
+                                <label>Max Rate (packets/sec)</label>
+                                <input type="number" id="maxRate" placeholder="e.g., 1000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evasion Tab -->
+                <div id="evasion" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Firewall/IDS Evasion</h2>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fragmentPackets">
+                                <label for="fragmentPackets">Fragment Packets (-f)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="badsum">
+                                <label for="badsum">Bad Checksum (--badsum)</label>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Decoy Scan</label>
+                                <input type="text" id="decoy" placeholder="-D RND:10 or IP1,IP2,ME">
+                            </div>
+                            <div class="form-group">
+                                <label>Spoof Source IP</label>
+                                <input type="text" id="spoofIP" placeholder="e.g., 192.168.1.100">
+                            </div>
+                            <div class="form-group">
+                                <label>Source Port</label>
+                                <input type="number" id="sourcePort" placeholder="e.g., 53">
+                            </div>
+                            <div class="form-group">
+                                <label>Spoof MAC</label>
+                                <input type="text" id="spoofMAC" placeholder="e.g., 00:11:22:33:44:55">
+                            </div>
+                            <div class="form-group">
+                                <label>Data Length</label>
+                                <input type="number" id="dataLength" placeholder="Random data bytes">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Tab -->
+                <div id="output" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Output Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Normal Output</label>
+                                <input type="text" id="outputNormal" placeholder="-oN filename.txt">
+                            </div>
+                            <div class="form-group">
+                                <label>XML Output</label>
+                                <input type="text" id="outputXML" placeholder="-oX filename.xml">
+                            </div>
+                            <div class="form-group">
+                                <label>Grepable Output</label>
+                                <input type="text" id="outputGrep" placeholder="-oG filename.gnmap">
+                            </div>
+                            <div class="form-group">
+                                <label>All Formats</label>
+                                <input type="text" id="outputAll" placeholder="-oA basename">
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="verbose">
+                                <label for="verbose">Verbose (-v)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="veryVerbose">
+                                <label for="veryVerbose">Very Verbose (-vv)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="debug">
+                                <label for="debug">Debug (-d)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="reason">
+                                <label for="reason">Show Reason (--reason)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="openOnly">
+                                <label for="openOnly">Open Ports Only (--open)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="packetTrace">
+                                <label for="packetTrace">Packet Trace (--packet-trace)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Command Output -->
+                <div class="command-output">
+                    <div class="command-header">
+                        <span class="command-title">🚀 Generated Command</span>
+                        <button class="copy-btn" onclick="copyCommand()">📋 Copy Command</button>
+                    </div>
+                    <div class="command-text" id="commandOutput">nmap</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // Generate command
+        function generateCommand() {
+            let command = 'nmap';
+            
+            // Target specification
+            const targets = document.getElementById('targets').value.trim();
+            const inputFile = document.getElementById('inputFile').value.trim();
+            const randomTargets = document.getElementById('randomTargets').value.trim();
+            const exclude = document.getElementById('exclude').value.trim();
+            
+            if (inputFile) command += ` -iL ${inputFile}`;
+            if (randomTargets) command += ` -iR ${randomTargets}`;
+            if (exclude) command += ` --exclude ${exclude}`;
+            
+            // Host Discovery
+            if (document.getElementById('sL').checked) command += ' -sL';
+            if (document.getElementById('sn').checked) command += ' -sn';
+            if (document.getElementById('Pn').checked) command += ' -Pn';
+            if (document.getElementById('PS').checked) {
+                const ports = document.getElementById('discoveryPorts').value.trim();
+                command += ports ? ` -PS${ports}` : ' -PS';
+            }
+            if (document.getElementById('PA').checked) {
+                const ports = document.getElementById('discoveryPorts').value.trim();
+                command += ports ? ` -PA${ports}` : ' -PA';
+            }
+            if (document.getElementById('PU').checked) {
+                const ports = document.getElementById('discoveryPorts').value.trim();
+                command += ports ? ` -PU${ports}` : ' -PU';
+            }
+            if (document.getElementById('PE').checked) command += ' -PE';
+            if (document.getElementById('traceroute').checked) command += ' --traceroute';
+            
+            const dnsResolution = document.getElementById('dnsResolution').value;
+            if (dnsResolution) command += ` ${dnsResolution}`;
+            
+            // Scan Techniques
+            const scanType = document.querySelector('input[name="scanType"]:checked');
+            if (scanType) command += ` ${scanType.value}`;
+            
+            // Port Specification
+            const portRange = document.getElementById('portRange').value.trim();
+            const topPorts = document.getElementById('topPorts').value.trim();
+            const excludePorts = document.getElementById('excludePorts').value.trim();
+            
+            if (document.getElementById('allPorts').checked) {
+                command += ' -p-';
+            } else if (portRange) {
+                command += ` -p ${portRange}`;
+            } else if (topPorts) {
+                command += ` --top-ports ${topPorts}`;
+            }
+            
+            if (excludePorts) command += ` --exclude-ports ${excludePorts}`;
+            if (document.getElementById('fastScan').checked) command += ' -F';
+            if (document.getElementById('sequential').checked) command += ' -r';
+            
+            // Service Detection
+            if (document.getElementById('sV').checked) command += ' -sV';
+            if (document.getElementById('versionLight').checked) command += ' --version-light';
+            if (document.getElementById('versionAll').checked) command += ' --version-all';
+            if (document.getElementById('versionTrace').checked) command += ' --version-trace';
+            
+            const versionIntensity = document.getElementById('versionIntensity').value.trim();
+            if (versionIntensity) command += ` --version-intensity ${versionIntensity}`;
+            
+            // Scripts
+            if (document.getElementById('sC').checked) command += ' -sC';
+            if (document.getElementById('scriptTrace').checked) command += ' --script-trace';
+            
+            const customScripts = document.getElementById('customScripts').value.trim();
+            const scriptArgs = document.getElementById('scriptArgs').value.trim();
+            
+            if (customScripts) command += ` --script=${customScripts}`;
+            if (scriptArgs) command += ` --script-args=${scriptArgs}`;
+            
+            // OS Detection
+            if (document.getElementById('aggressiveScan').checked) {
+                command += ' -A';
+            } else {
+                if (document.getElementById('osDetection').checked) command += ' -O';
+                if (document.getElementById('osscanLimit').checked) command += ' --osscan-limit';
+                if (document.getElementById('osscanGuess').checked) command += ' --osscan-guess';
+            }
+            
+            // Timing
+            const timingTemplate = document.getElementById('timingTemplate').value;
+            if (timingTemplate) command += ` ${timingTemplate}`;
+            
+            const hostTimeout = document.getElementById('hostTimeout').value.trim();
+            const maxRetries = document.getElementById('maxRetries').value.trim();
+            const minRate = document.getElementById('minRate').value.trim();
+            const maxRate = document.getElementById('maxRate').value.trim();
+            
+            if (hostTimeout) command += ` --host-timeout ${hostTimeout}`;
+            if (maxRetries) command += ` --max-retries ${maxRetries}`;
+            if (minRate) command += ` --min-rate ${minRate}`;
+            if (maxRate) command += ` --max-rate ${maxRate}`;
+            
+            // Evasion
+            if (document.getElementById('fragmentPackets').checked) command += ' -f';
+            if (document.getElementById('badsum').checked) command += ' --badsum';
+            
+            const decoy = document.getElementById('decoy').value.trim();
+            const spoofIP = document.getElementById('spoofIP').value.trim();
+            const sourcePort = document.getElementById('sourcePort').value.trim();
+            const spoofMAC = document.getElementById('spoofMAC').value.trim();
+            const dataLength = document.getElementById('dataLength').value.trim();
+            
+            if (decoy) command += ` -D ${decoy}`;
+            if (spoofIP) command += ` -S ${spoofIP}`;
+            if (sourcePort) command += ` --source-port ${sourcePort}`;
+            if (spoofMAC) command += ` --spoof-mac ${spoofMAC}`;
+            if (dataLength) command += ` --data-length ${dataLength}`;
+            
+            // Output
+            const outputNormal = document.getElementById('outputNormal').value.trim();
+            const outputXML = document.getElementById('outputXML').value.trim();
+            const outputGrep = document.getElementById('outputGrep').value.trim();
+            const outputAll = document.getElementById('outputAll').value.trim();
+            
+            if (outputAll) {
+                command += ` -oA ${outputAll}`;
+            } else {
+                if (outputNormal) command += ` -oN ${outputNormal}`;
+                if (outputXML) command += ` -oX ${outputXML}`;
+                if (outputGrep) command += ` -oG ${outputGrep}`;
+            }
+            
+            if (document.getElementById('veryVerbose').checked) {
+                command += ' -vv';
+            } else if (document.getElementById('verbose').checked) {
+                command += ' -v';
+            }
+            
+            if (document.getElementById('debug').checked) command += ' -d';
+            if (document.getElementById('reason').checked) command += ' --reason';
+            if (document.getElementById('openOnly').checked) command += ' --open';
+            if (document.getElementById('packetTrace').checked) command += ' --packet-trace';
+            
+            // Add targets at the end
+            if (targets) {
+                const targetList = targets.split(/[\n,]/).map(t => t.trim()).filter(t => t).join(' ');
+                command += ` ${targetList}`;
+            }
+            
+            document.getElementById('commandOutput').textContent = command;
+        }
+
+        // Copy command to clipboard
+        function copyCommand() {
+            const commandText = document.getElementById('commandOutput').textContent;
+            navigator.clipboard.writeText(commandText).then(() => {
+                showToast('✅ Command copied to clipboard!');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInUp 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // Add event listeners to all inputs
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', generateCommand);
+            input.addEventListener('change', generateCommand);
+        });
+
+        // Generate initial command
+        generateCommand();
+    </script>
+</body>
+</html>
