@@ -303,6 +303,15 @@
             box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
         }
 
+        input[type="text"]:disabled,
+        input[type="number"]:disabled,
+        select:disabled,
+        textarea:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--bg-primary);
+        }
+
         textarea {
             resize: vertical;
             min-height: 100px;
@@ -1537,6 +1546,38 @@
             }, 250);
         });
 
+        // Mutual exclusion logic for targets and file inputs
+        const targetsInput = document.getElementById('targets');
+        const inputFileField = document.getElementById('inputFile');
+        const randomTargetsField = document.getElementById('randomTargets');
+
+        function updateInputStates() {
+            const hasTargets = targetsInput.value.trim() !== '';
+            const hasFile = inputFileField.value.trim() !== '';
+            const hasRandom = randomTargetsField.value.trim() !== '';
+
+            // If targets has value, disable file and random
+            if (hasTargets) {
+                inputFileField.disabled = true;
+                randomTargetsField.disabled = true;
+            } 
+            // If file or random has value, disable targets
+            else if (hasFile || hasRandom) {
+                targetsInput.disabled = true;
+            } 
+            // If all are empty, enable all
+            else {
+                targetsInput.disabled = false;
+                inputFileField.disabled = false;
+                randomTargetsField.disabled = false;
+            }
+        }
+
+        // Add event listeners for mutual exclusion
+        targetsInput.addEventListener('input', updateInputStates);
+        inputFileField.addEventListener('input', updateInputStates);
+        randomTargetsField.addEventListener('input', updateInputStates);
+
         function generateCommand() {
             let command = 'nmap';
             
@@ -1765,6 +1806,7 @@
         function clearAll() {
             document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(input => {
                 input.value = '';
+                input.disabled = false; // Re-enable all inputs
             });
             document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
                 input.checked = false;
@@ -1785,6 +1827,7 @@
             document.getElementById('osDetection').checked = true;
             document.getElementById('timingTemplate').value = '-T4';
             document.getElementById('verbose').checked = true;
+            updateInputStates(); // Update states after loading example
             generateCommand();
             showToast('📝 Example loaded!');
         }
