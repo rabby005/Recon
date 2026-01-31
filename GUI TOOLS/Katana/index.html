@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional HTTPx Command Builder</title>
+    <title>Professional Katana Command Builder</title>
     <link rel="icon" href="Logo/rabbiInfosec3.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Spline+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Spline+Sans:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -29,7 +29,7 @@
         }
 
         body {
-            font-family: 'Spline Sans', sans-serif;
+            font-family: 'Spline Sans', 'Noto Sans Bengali', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
@@ -51,7 +51,7 @@
             border-bottom: 1px solid var(--border-color);
             animation: fadeIn 0.6s ease-out;
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto 1fr auto auto;
             align-items: center;
             gap: 2rem;
             position: relative;
@@ -77,6 +77,25 @@
             color: var(--text-secondary);
             font-size: clamp(0.9rem, 2.5vw, 1.1rem);
             padding: 0 1rem;
+        }
+
+        .lang-toggle {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(108, 92, 231, 0.15));
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            box-shadow: var(--glow);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
         }
 
         .developer-credit {
@@ -163,7 +182,7 @@
             color: var(--text-secondary);
             cursor: pointer;
             border-radius: 8px;
-            font-family: 'Spline Sans', sans-serif;
+            font-family: 'Spline Sans', 'Noto Sans Bengali', sans-serif;
             font-weight: 600;
             font-size: 0.95rem;
             transition: all 0.3s ease;
@@ -392,7 +411,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-family: 'Spline Sans', sans-serif;
+            font-family: 'Spline Sans', 'Noto Sans Bengali', sans-serif;
             font-size: clamp(0.85rem, 2vw, 1rem);
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
@@ -479,6 +498,11 @@
             color: var(--text-secondary);
         }
 
+        /* Language specific styles */
+        [lang="bn"] {
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
         /* Tablet and below */
         @media (max-width: 1024px) {
             header {
@@ -496,6 +520,7 @@
                 width: 100%;
             }
 
+            .lang-toggle,
             .developer-credit {
                 justify-self: center;
                 margin: 0 auto;
@@ -594,6 +619,7 @@
                 font-size: 1.8rem;
             }
 
+            .lang-toggle,
             .developer-credit {
                 font-size: 0.8rem;
                 padding: 0.6rem 1rem;
@@ -792,26 +818,44 @@
                 </div>
             </div>
             <div class="header-content">
-                <h1>Professional HTTPx Command Builder</h1>
-                <p class="subtitle">Fast and Multi-purpose HTTP Toolkit - All HTTPx Options Included</p>
+                <h1 data-en="Professional Katana Command Builder" data-bn="পেশাদার কাতানা কমান্ড বিল্ডার">Professional Katana Command Builder</h1>
+                <p class="subtitle" data-en="Next-generation Web Crawling Framework - All Katana Options Included" data-bn="পরবর্তী প্রজন্মের ওয়েব ক্রলিং ফ্রেমওয়ার্ক - সমস্ত কাতানা অপশন অন্তর্ভুক্ত">Next-generation Web Crawling Framework - All Katana Options Included</p>
             </div>
-            <a href="https://github.com/rabby005" class="developer-credit">Developed by CSRR</a>
+            <button class="lang-toggle" onclick="toggleLanguage()">
+                <span id="langText">বাংলা</span>
+            </button>
+            <a href="https://github.com/rabby005" class="developer-credit">
+                <span data-en="Developed by CSRRabbi" data-bn="ডেভেলপড বাই CSRRabbi">Developed by CSRR</span>
+            </a>
         </header>
 
         <div class="main-layout">
             <aside class="sidebar">
                 <nav class="tabs">
-                    <button class="tab active" data-tab="input">🎯 Input</button>
-                    <button class="tab" data-tab="probes">🔬 Probes</button>
-                    <button class="tab" data-tab="matchers">✅ Matchers</button>
-                    <button class="tab" data-tab="filters">🔍 Filters</button>
-                    <button class="tab" data-tab="ratelimit">⏱️ Rate Limit</button>
-                    <button class="tab" data-tab="output">📄 Output</button>
-                    <button class="tab" data-tab="config">⚙️ Configuration</button>
-                    <button class="tab" data-tab="headless">🌐 Headless</button>
-                    <button class="tab" data-tab="misc">🔧 Miscellaneous</button>
-                    <button class="tab" data-tab="debug">🐛 Debug</button>
-                    <button class="tab" data-tab="optimization">🚀 Optimization</button>
+                    <button class="tab active" data-tab="input">
+                        <span data-en="🎯 Input" data-bn="🎯 ইনপুট">🎯 Input</span>
+                    </button>
+                    <button class="tab" data-tab="config">
+                        <span data-en="⚙️ Configuration" data-bn="⚙️ কনফিগারেশন">⚙️ Configuration</span>
+                    </button>
+                    <button class="tab" data-tab="scope">
+                        <span data-en="🎯 Scope" data-bn="🎯 স্কোপ">🎯 Scope</span>
+                    </button>
+                    <button class="tab" data-tab="filter">
+                        <span data-en="🔍 Filter" data-bn="🔍 ফিল্টার">🔍 Filter</span>
+                    </button>
+                    <button class="tab" data-tab="headless">
+                        <span data-en="🌐 Headless" data-bn="🌐 হেডলেস">🌐 Headless</span>
+                    </button>
+                    <button class="tab" data-tab="ratelimit">
+                        <span data-en="⏱️ Rate Limit" data-bn="⏱️ রেট লিমিট">⏱️ Rate Limit</span>
+                    </button>
+                    <button class="tab" data-tab="output">
+                        <span data-en="📄 Output" data-bn="📄 আউটপুট">📄 Output</span>
+                    </button>
+                    <button class="tab" data-tab="debug">
+                        <span data-en="🐛 Debug" data-bn="🐛 ডিবাগ">🐛 Debug</span>
+                    </button>
                 </nav>
             </aside>
 
@@ -819,419 +863,29 @@
                 <!-- Input Tab -->
                 <div id="input" class="tab-content active">
                     <div class="section">
-                        <h2 class="section-title">Input Specification</h2>
+                        <h2 class="section-title">
+                            <span data-en="Input Specification" data-bn="ইনপুট স্পেসিফিকেশন">Input Specification</span>
+                        </h2>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Target Host(s) (-u)</label>
+                                <label data-en="Target URL(s) (-u)" data-bn="টার্গেট ইউআরএল (-u)">Target URL(s) (-u)</label>
                                 <textarea id="targets" placeholder="https://example.com&#10;http://test.com"></textarea>
-                                <span class="help-text">URLs to probe - one per line</span>
+                                <span class="help-text" data-en="URLs to crawl - one per line" data-bn="ক্রল করার জন্য ইউআরএল - প্রতি লাইনে একটি">URLs to crawl - one per line</span>
                             </div>
                             <div class="form-group">
-                                <label>Target List File (-l)</label>
-                                <input type="text" id="targetList" placeholder="targets.txt">
-                                <span class="help-text">File containing list of hosts to process</span>
+                                <label data-en="Resume Scan (-resume)" data-bn="স্ক্যান পুনরায় শুরু করুন (-resume)">Resume Scan (-resume)</label>
+                                <input type="text" id="resume" placeholder="resume.cfg">
+                                <span class="help-text" data-en="Resume scan using config file" data-bn="কনফিগ ফাইল ব্যবহার করে স্ক্যান পুনরায় শুরু করুন">Resume scan using config file</span>
                             </div>
                             <div class="form-group">
-                                <label>Raw Request File (-rr)</label>
-                                <input type="text" id="rawRequest" placeholder="request.txt">
-                                <span class="help-text">File containing raw HTTP request</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Input Mode (-im)</label>
-                                <select id="inputMode">
-                                    <option value="">None</option>
-                                    <option value="burp">Burp Suite</option>
-                                </select>
-                                <span class="help-text">Mode of input file</span>
+                                <label data-en="Exclude Hosts (-e)" data-bn="হোস্ট বাদ দিন (-e)">Exclude Hosts (-e)</label>
+                                <input type="text" id="exclude" placeholder="cdn,private-ips">
+                                <span class="help-text" data-en="Filter: cdn, private-ips, cidr, ip, regex" data-bn="ফিল্টার: cdn, private-ips, cidr, ip, regex">Filter: cdn, private-ips, cidr, ip, regex</span>
                             </div>
                         </div>
                         <div class="info-box">
-                            💡 <strong>Tip:</strong> Use -u for individual URLs or -l for a file with multiple hosts
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Probes Tab -->
-                <div id="probes" class="tab-content">
-                    <div class="section">
-                        <h2 class="section-title">Probe Options</h2>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="statusCode">
-                                <label for="statusCode">Status Code (-sc)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="contentLength">
-                                <label for="contentLength">Content Length (-cl)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="contentType">
-                                <label for="contentType">Content Type (-ct)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="location">
-                                <label for="location">Redirect Location (-location)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="favicon">
-                                <label for="favicon">Favicon Hash (-favicon)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="jarm">
-                                <label for="jarm">JARM Fingerprint (-jarm)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="responseTime">
-                                <label for="responseTime">Response Time (-rt)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="lineCount">
-                                <label for="lineCount">Line Count (-lc)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="wordCount">
-                                <label for="wordCount">Word Count (-wc)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="title">
-                                <label for="title">Page Title (-title)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="webServer">
-                                <label for="webServer">Server Name (-server)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="techDetect">
-                                <label for="techDetect">Tech Detection (-td)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="method">
-                                <label for="method">HTTP Method (-method)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="websocket">
-                                <label for="websocket">WebSocket (-ws)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="ip">
-                                <label for="ip">Host IP (-ip)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cname">
-                                <label for="cname">Host CNAME (-cname)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="asn">
-                                <label for="asn">ASN Information (-asn)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cdn">
-                                <label for="cdn">CDN/WAF Detection (-cdn)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="probe">
-                                <label for="probe">Probe Status (-probe)</label>
-                            </div>
-                        </div>
-                        <div class="form-grid" style="margin-top: 1.5rem;">
-                            <div class="form-group">
-                                <label>Body Preview Length (-bp)</label>
-                                <input type="number" id="bodyPreview" placeholder="100">
-                                <span class="help-text">First N characters of response body</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Hash Type (-hash)</label>
-                                <select id="hashType">
-                                    <option value="">None</option>
-                                    <option value="md5">MD5</option>
-                                    <option value="mmh3">MMH3</option>
-                                    <option value="simhash">SimHash</option>
-                                    <option value="sha1">SHA1</option>
-                                    <option value="sha256">SHA256</option>
-                                    <option value="sha512">SHA512</option>
-                                </select>
-                                <span class="help-text">Response body hash algorithm</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Custom Fingerprint File (-cff)</label>
-                                <input type="text" id="customFingerprint" placeholder="fingerprints.json">
-                                <span class="help-text">Custom technology fingerprint file</span>
-                            </div>
-                        </div>
-                        <div class="checkbox-group" style="margin-top: 1.5rem;">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cpe">
-                                <label for="cpe">CPE Detection (-cpe)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="wordpress">
-                                <label for="wordpress">WordPress Detection (-wp)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="extractFqdn">
-                                <label for="extractFqdn">Extract FQDN (-efqdn)</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Matchers Tab -->
-                <div id="matchers" class="tab-content">
-                    <div class="section">
-                        <h2 class="section-title">Matcher Options</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Match Status Code (-mc)</label>
-                                <input type="text" id="matchCode" placeholder="200,302">
-                                <span class="help-text">Comma-separated status codes</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match Content Length (-ml)</label>
-                                <input type="text" id="matchLength" placeholder="100,102">
-                                <span class="help-text">Comma-separated lengths</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match Line Count (-mlc)</label>
-                                <input type="text" id="matchLineCount" placeholder="423,532">
-                                <span class="help-text">Response body line count</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match Word Count (-mwc)</label>
-                                <input type="text" id="matchWordCount" placeholder="43,55">
-                                <span class="help-text">Response body word count</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match Favicon (-mfc)</label>
-                                <input type="text" id="matchFavicon" placeholder="1494302000">
-                                <span class="help-text">Favicon hash values</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match String (-ms)</label>
-                                <input type="text" id="matchString" placeholder="admin,login">
-                                <span class="help-text">Strings to match in response</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match Regex (-mr)</label>
-                                <input type="text" id="matchRegex" placeholder="admin.*panel">
-                                <span class="help-text">Regex pattern to match</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match CDN (-mcdn)</label>
-                                <input type="text" id="matchCdn" placeholder="cloudfront,fastly">
-                                <span class="help-text">CDN providers to match</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match Response Time (-mrt)</label>
-                                <input type="text" id="matchResponseTime" placeholder="< 1">
-                                <span class="help-text">Response time condition (in seconds)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Match DSL Condition (-mdc)</label>
-                                <input type="text" id="matchCondition" placeholder="status_code==200">
-                                <span class="help-text">Custom DSL expression</span>
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            💡 <strong>Note:</strong> Matchers help filter results based on specific criteria
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filters Tab -->
-                <div id="filters" class="tab-content">
-                    <div class="section">
-                        <h2 class="section-title">Filter Options</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Filter Status Code (-fc)</label>
-                                <input type="text" id="filterCode" placeholder="403,401">
-                                <span class="help-text">Status codes to exclude</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Content Length (-fl)</label>
-                                <input type="text" id="filterLength" placeholder="23,33">
-                                <span class="help-text">Content lengths to exclude</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Line Count (-flc)</label>
-                                <input type="text" id="filterLineCount" placeholder="423,532">
-                                <span class="help-text">Line counts to exclude</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Word Count (-fwc)</label>
-                                <input type="text" id="filterWordCount" placeholder="423,532">
-                                <span class="help-text">Word counts to exclude</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Favicon (-ffc)</label>
-                                <input type="text" id="filterFavicon" placeholder="1494302000">
-                                <span class="help-text">Favicon hashes to exclude</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter String (-fs)</label>
-                                <input type="text" id="filterString" placeholder="admin">
-                                <span class="help-text">Strings to filter out</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Regex (-fe)</label>
-                                <input type="text" id="filterRegex" placeholder="admin.*">
-                                <span class="help-text">Regex pattern to filter</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter CDN (-fcdn)</label>
-                                <input type="text" id="filterCdn" placeholder="cloudfront">
-                                <span class="help-text">CDN providers to filter</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Response Time (-frt)</label>
-                                <input type="text" id="filterResponseTime" placeholder="> 1">
-                                <span class="help-text">Response time condition</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter DSL Condition (-fdc)</label>
-                                <input type="text" id="filterCondition" placeholder="status_code!=200">
-                                <span class="help-text">Custom DSL expression</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Strip Tags (-strip)</label>
-                                <select id="strip">
-                                    <option value="">None</option>
-                                    <option value="html">HTML</option>
-                                    <option value="xml">XML</option>
-                                </select>
-                                <span class="help-text">Strip tags from response</span>
-                            </div>
-                        </div>
-                        <div class="checkbox-group" style="margin-top: 1.5rem;">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="filterErrorPage">
-                                <label for="filterErrorPage">ML Error Page Detection (-fep)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="filterDuplicates">
-                                <label for="filterDuplicates">Filter Duplicates (-fd)</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Rate Limit Tab -->
-                <div id="ratelimit" class="tab-content">
-                    <div class="section">
-                        <h2 class="section-title">Rate Limit & Performance</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Threads (-t)</label>
-                                <input type="number" id="threads" placeholder="50">
-                                <span class="help-text">Number of concurrent threads (default: 50)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Rate Limit Per Second (-rl)</label>
-                                <input type="number" id="rateLimit" placeholder="150">
-                                <span class="help-text">Maximum requests per second (default: 150)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Rate Limit Per Minute (-rlm)</label>
-                                <input type="number" id="rateLimitMinute" placeholder="">
-                                <span class="help-text">Maximum requests per minute</span>
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            💡 <strong>Tip:</strong> Adjust threads and rate limits based on target capacity
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Output Tab -->
-                <div id="output" class="tab-content">
-                    <div class="section">
-                        <h2 class="section-title">Output Options</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Output File (-o)</label>
-                                <input type="text" id="outputFile" placeholder="results.txt">
-                                <span class="help-text">File to write output results</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Output All Formats (-oa)</label>
-                                <input type="text" id="outputAll" placeholder="results">
-                                <span class="help-text">Filename for all output formats</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Store Response Directory (-srd)</label>
-                                <input type="text" id="storeResponseDir" placeholder="./responses/">
-                                <span class="help-text">Custom directory for responses</span>
-                            </div>
-                            <div class="form-group">
-                                <label>CSV Output Encoding (-csvo)</label>
-                                <input type="text" id="csvEncoding" placeholder="utf-8">
-                                <span class="help-text">Define CSV output encoding</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Protocol (-pr)</label>
-                                <select id="protocol">
-                                    <option value="">Auto</option>
-                                    <option value="http11">HTTP/1.1</option>
-                                    <option value="unknown">Unknown</option>
-                                </select>
-                                <span class="help-text">Protocol to use</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Filter Error Page Path (-fepp)</label>
-                                <input type="text" id="filterErrorPagePath" placeholder="filtered_error_page.json">
-                                <span class="help-text">Path for filtered error pages</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Exclude Output Fields (-eof)</label>
-                                <input type="text" id="excludeFields" placeholder="header,body">
-                                <span class="help-text">Fields to exclude from output</span>
-                            </div>
-                        </div>
-                        <div class="checkbox-group" style="margin-top: 1.5rem;">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="storeResponse">
-                                <label for="storeResponse">Store HTTP Response (-sr)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="omitBody">
-                                <label for="omitBody">Omit Response Body (-ob)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="csv">
-                                <label for="csv">CSV Format (-csv)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="json">
-                                <label for="json">JSON Format (-j)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="includeResponseHeader">
-                                <label for="includeResponseHeader">Include Response Header (-irh)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="includeResponse">
-                                <label for="includeResponse">Include Full Response (-irr)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="includeResponseBase64">
-                                <label for="includeResponseBase64">Include Base64 Response (-irrb)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="includeChain">
-                                <label for="includeChain">Include Redirect Chain (-include-chain)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="storeChain">
-                                <label for="storeChain">Store Redirect Chain (-store-chain)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="storeVisionRecon">
-                                <label for="storeVisionRecon">Store Vision Recon (-svrc)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="listOutputFields">
-                                <label for="listOutputFields">List Output Fields (-lof)</label>
-                            </div>
+                            💡 <strong data-en="Tip:" data-bn="টিপস:">Tip:</strong> 
+                            <span data-en="Use -u for individual URLs or a file path containing multiple URLs" data-bn="পৃথক ইউআরএলের জন্য -u অথবা একাধিক ইউআরএল সহ ফাইল পাথ ব্যবহার করুন">Use -u for individual URLs or a file path containing multiple URLs</span>
                         </div>
                     </div>
                 </div>
@@ -1239,129 +893,241 @@
                 <!-- Configuration Tab -->
                 <div id="config" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Configuration</h2>
+                        <h2 class="section-title">
+                            <span data-en="Configuration Options" data-bn="কনফিগারেশন অপশন">Configuration Options</span>
+                        </h2>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Config File (-config)</label>
-                                <input type="text" id="configFile" placeholder="~/.config/httpx/config.yaml">
-                                <span class="help-text">Path to configuration file</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Resolvers (-r)</label>
+                                <label data-en="Resolvers (-r)" data-bn="রিজলভার (-r)">Resolvers (-r)</label>
                                 <input type="text" id="resolvers" placeholder="8.8.8.8,1.1.1.1">
-                                <span class="help-text">Custom DNS resolvers</span>
+                                <span class="help-text" data-en="Custom DNS resolvers" data-bn="কাস্টম ডিএনএস রিজলভার">Custom DNS resolvers</span>
                             </div>
                             <div class="form-group">
-                                <label>Allow List (-allow)</label>
-                                <input type="text" id="allow" placeholder="192.168.1.0/24">
-                                <span class="help-text">Allowed IP/CIDR ranges</span>
+                                <label data-en="Max Depth (-d)" data-bn="সর্বোচ্চ গভীরতা (-d)">Max Depth (-d)</label>
+                                <input type="number" id="depth" placeholder="3">
+                                <span class="help-text" data-en="Maximum crawl depth (default: 3)" data-bn="সর্বোচ্চ ক্রল গভীরতা (ডিফল্ট: 3)">Maximum crawl depth (default: 3)</span>
                             </div>
                             <div class="form-group">
-                                <label>Deny List (-deny)</label>
-                                <input type="text" id="deny" placeholder="10.0.0.0/8">
-                                <span class="help-text">Denied IP/CIDR ranges</span>
+                                <label data-en="Crawl Duration (-ct)" data-bn="ক্রল সময়কাল (-ct)">Crawl Duration (-ct)</label>
+                                <input type="text" id="crawlDuration" placeholder="30s">
+                                <span class="help-text" data-en="Max duration (s, m, h, d)" data-bn="সর্বোচ্চ সময়কাল (s, m, h, d)">Max duration (s, m, h, d)</span>
                             </div>
                             <div class="form-group">
-                                <label>SNI Name (-sni)</label>
-                                <input type="text" id="sniName" placeholder="example.com">
-                                <span class="help-text">Custom TLS SNI name</span>
+                                <label data-en="Known Files (-kf)" data-bn="পরিচিত ফাইল (-kf)">Known Files (-kf)</label>
+                                <select id="knownFiles">
+                                    <option value="">None</option>
+                                    <option value="all">All</option>
+                                    <option value="robotstxt">robots.txt</option>
+                                    <option value="sitemapxml">sitemap.xml</option>
+                                </select>
+                                <span class="help-text" data-en="Enable known files crawling" data-bn="পরিচিত ফাইল ক্রলিং সক্ষম করুন">Enable known files crawling</span>
                             </div>
                             <div class="form-group">
-                                <label>Custom Headers (-H)</label>
-                                <textarea id="headers" placeholder="Authorization: Bearer token&#10;X-Custom: value"></textarea>
-                                <span class="help-text">Custom HTTP headers (one per line)</span>
+                                <label data-en="Max Response Size (-mrs)" data-bn="সর্বোচ্চ রেসপন্স সাইজ (-mrs)">Max Response Size (-mrs)</label>
+                                <input type="number" id="maxResponseSize" placeholder="4194304">
+                                <span class="help-text" data-en="Maximum response size in bytes" data-bn="বাইটে সর্বোচ্চ রেসপন্স সাইজ">Maximum response size in bytes</span>
                             </div>
                             <div class="form-group">
-                                <label>HTTP Proxy (-proxy)</label>
+                                <label data-en="Timeout (-timeout)" data-bn="টাইমআউট (-timeout)">Timeout (-timeout)</label>
+                                <input type="number" id="timeout" placeholder="10">
+                                <span class="help-text" data-en="Request timeout in seconds" data-bn="সেকেন্ডে রিকোয়েস্ট টাইমআউট">Request timeout in seconds</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Retry Count (-retry)" data-bn="পুনরায় চেষ্টা (-retry)">Retry Count (-retry)</label>
+                                <input type="number" id="retry" placeholder="1">
+                                <span class="help-text" data-en="Number of retry attempts" data-bn="পুনরায় চেষ্টার সংখ্যা">Number of retry attempts</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="HTTP Proxy (-proxy)" data-bn="HTTP প্রক্সি (-proxy)">HTTP Proxy (-proxy)</label>
                                 <input type="text" id="proxy" placeholder="http://127.0.0.1:8080">
-                                <span class="help-text">HTTP proxy to use</span>
+                                <span class="help-text" data-en="HTTP/SOCKS5 proxy to use" data-bn="ব্যবহার করার জন্য HTTP/SOCKS5 প্রক্সি">HTTP/SOCKS5 proxy to use</span>
                             </div>
                             <div class="form-group">
-                                <label>Request Methods (-x)</label>
-                                <input type="text" id="methods" placeholder="GET,POST,PUT">
-                                <span class="help-text">HTTP methods to probe (use 'all' for all)</span>
+                                <label data-en="Custom Headers (-H)" data-bn="কাস্টম হেডার (-H)">Custom Headers (-H)</label>
+                                <textarea id="headers" placeholder="Authorization: Bearer token&#10;X-Custom: value"></textarea>
+                                <span class="help-text" data-en="Custom headers (one per line)" data-bn="কাস্টম হেডার (প্রতি লাইনে একটি)">Custom headers (one per line)</span>
                             </div>
                             <div class="form-group">
-                                <label>POST Body (-body)</label>
-                                <textarea id="body" placeholder='{"key":"value"}'></textarea>
-                                <span class="help-text">POST body to include in request</span>
+                                <label data-en="Config File (-config)" data-bn="কনফিগ ফাইল (-config)">Config File (-config)</label>
+                                <input type="text" id="configFile" placeholder="katana-config.yaml">
+                                <span class="help-text" data-en="Path to configuration file" data-bn="কনফিগারেশন ফাইলের পাথ">Path to configuration file</span>
                             </div>
                             <div class="form-group">
-                                <label>Max Redirects (-maxr)</label>
-                                <input type="number" id="maxRedirects" placeholder="10">
-                                <span class="help-text">Maximum redirects to follow (default: 10)</span>
+                                <label data-en="Form Config (-fc)" data-bn="ফর্ম কনফিগ (-fc)">Form Config (-fc)</label>
+                                <input type="text" id="formConfig" placeholder="form-config.yaml">
+                                <span class="help-text" data-en="Custom form configuration file" data-bn="কাস্টম ফর্ম কনফিগারেশন ফাইল">Custom form configuration file</span>
                             </div>
                             <div class="form-group">
-                                <label>Secret File (-sf)</label>
-                                <input type="text" id="secretFile" placeholder="secrets.txt">
-                                <span class="help-text">Path to secret file for authentication</span>
+                                <label data-en="Field Config (-flc)" data-bn="ফিল্ড কনফিগ (-flc)">Field Config (-flc)</label>
+                                <input type="text" id="fieldConfig" placeholder="field-config.yaml">
+                                <span class="help-text" data-en="Custom field configuration file" data-bn="কাস্টম ফিল্ড কনফিগারেশন ফাইল">Custom field configuration file</span>
                             </div>
                             <div class="form-group">
-                                <label>HTTP API Endpoint (-hae)</label>
-                                <input type="text" id="httpApiEndpoint" placeholder="http://localhost:8080">
-                                <span class="help-text">Experimental HTTP API endpoint</span>
+                                <label data-en="Strategy (-s)" data-bn="স্ট্র্যাটেজি (-s)">Strategy (-s)</label>
+                                <select id="strategy">
+                                    <option value="depth-first">Depth-first</option>
+                                    <option value="breadth-first">Breadth-first</option>
+                                </select>
+                                <span class="help-text" data-en="Visit strategy" data-bn="ভিজিট স্ট্র্যাটেজি">Visit strategy</span>
                             </div>
                         </div>
                         <div class="checkbox-group" style="margin-top: 1.5rem;">
                             <div class="checkbox-item">
-                                <input type="checkbox" id="randomAgent">
-                                <label for="randomAgent">Random User-Agent (-random-agent)</label>
+                                <input type="checkbox" id="jsCrawl">
+                                <label for="jsCrawl" data-en="JS Crawling (-jc)" data-bn="JS ক্রলিং (-jc)">JS Crawling (-jc)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="autoReferer">
-                                <label for="autoReferer">Auto Referer (-auto-referer)</label>
+                                <input type="checkbox" id="jsluice">
+                                <label for="jsluice" data-en="JSLuice Parsing (-jsl)" data-bn="JSLuice পার্সিং (-jsl)">JSLuice Parsing (-jsl)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="unsafe">
-                                <label for="unsafe">Unsafe Mode (-unsafe)</label>
+                                <input type="checkbox" id="automaticFormFill">
+                                <label for="automaticFormFill" data-en="Auto Form Fill (-aff)" data-bn="অটো ফর্ম ফিল (-aff)">Auto Form Fill (-aff)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="resume">
-                                <label for="resume">Resume Scan (-resume)</label>
+                                <input type="checkbox" id="formExtraction">
+                                <label for="formExtraction" data-en="Form Extraction (-fx)" data-bn="ফর্ম এক্সট্রাকশন (-fx)">Form Extraction (-fx)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="followRedirects">
-                                <label for="followRedirects">Follow Redirects (-fr)</label>
+                                <input type="checkbox" id="techDetect">
+                                <label for="techDetect" data-en="Tech Detection (-td)" data-bn="টেক ডিটেকশন (-td)">Tech Detection (-td)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="followHostRedirects">
-                                <label for="followHostRedirects">Follow Host Redirects (-fhr)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="respectHsts">
-                                <label for="respectHsts">Respect HSTS (-rhsts)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="vhostInput">
-                                <label for="vhostInput">VHost Input (-vhost-input)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="stream">
-                                <label for="stream">Stream Mode (-s)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="skipDedupe">
-                                <label for="skipDedupe">Skip Dedupe (-sd)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="leaveDefaultPorts">
-                                <label for="leaveDefaultPorts">Leave Default Ports (-ldp)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="ztls">
-                                <label for="ztls">Use ZTLS (-ztls)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="noDecode">
-                                <label for="noDecode">No Decode (-no-decode)</label>
+                                <input type="checkbox" id="ignoreQueryParams">
+                                <label for="ignoreQueryParams" data-en="Ignore Query Params (-iqp)" data-bn="কোয়েরি প্যারামিটার উপেক্ষা করুন (-iqp)">Ignore Query Params (-iqp)</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="tlsImpersonate">
-                                <label for="tlsImpersonate">TLS Impersonate (-tlsi)</label>
+                                <label for="tlsImpersonate" data-en="TLS Impersonate (-tlsi)" data-bn="TLS ইম্পারসোনেট (-tlsi)">TLS Impersonate (-tlsi)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="noStdin">
-                                <label for="noStdin">No Stdin (-no-stdin)</label>
+                                <input type="checkbox" id="disableRedirects">
+                                <label for="disableRedirects" data-en="Disable Redirects (-dr)" data-bn="রিডাইরেক্ট নিষ্ক্রিয় করুন (-dr)">Disable Redirects (-dr)</label>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong data-en="Note:" data-bn="নোট:">Note:</strong> 
+                            <span data-en="JSLuice parsing is memory intensive - use carefully" data-bn="JSLuice পার্সিং মেমরি নিবিড় - সাবধানে ব্যবহার করুন">JSLuice parsing is memory intensive - use carefully</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scope Tab -->
+                <div id="scope" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span data-en="Scope Options" data-bn="স্কোপ অপশন">Scope Options</span>
+                        </h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label data-en="Crawl Scope (-cs)" data-bn="ক্রল স্কোপ (-cs)">Crawl Scope (-cs)</label>
+                                <input type="text" id="crawlScope" placeholder="^https://example.com.*">
+                                <span class="help-text" data-en="In-scope URL regex" data-bn="ইন-স্কোপ ইউআরএল রেজেক্স">In-scope URL regex</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Crawl Out-Scope (-cos)" data-bn="ক্রল আউট-স্কোপ (-cos)">Crawl Out-Scope (-cos)</label>
+                                <input type="text" id="crawlOutScope" placeholder="^https://cdn.*">
+                                <span class="help-text" data-en="Out-of-scope URL regex" data-bn="আউট-অফ-স্কোপ ইউআরএল রেজেক্স">Out-of-scope URL regex</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Field Scope (-fs)" data-bn="ফিল্ড স্কোপ (-fs)">Field Scope (-fs)</label>
+                                <select id="fieldScope">
+                                    <option value="rdn">RDN (default)</option>
+                                    <option value="dn">DN</option>
+                                    <option value="fqdn">FQDN</option>
+                                </select>
+                                <span class="help-text" data-en="Pre-defined scope field" data-bn="পূর্ব-নির্ধারিত স্কোপ ফিল্ড">Pre-defined scope field</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noScope">
+                                <label for="noScope" data-en="No Scope (-ns)" data-bn="নো স্কোপ (-ns)">No Scope (-ns)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="displayOutScope">
+                                <label for="displayOutScope" data-en="Display Out-Scope (-do)" data-bn="আউট-স্কোপ প্রদর্শন (-do)">Display Out-Scope (-do)</label>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong data-en="Tip:" data-bn="টিপস:">Tip:</strong> 
+                            <span data-en="Use regex patterns to define precise crawling boundaries" data-bn="সুনির্দিষ্ট ক্রলিং সীমানা নির্ধারণ করতে রেজেক্স প্যাটার্ন ব্যবহার করুন">Use regex patterns to define precise crawling boundaries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Tab -->
+                <div id="filter" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span data-en="Filter Options" data-bn="ফিল্টার অপশন">Filter Options</span>
+                        </h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label data-en="Match Regex (-mr)" data-bn="ম্যাচ রেজেক্স (-mr)">Match Regex (-mr)</label>
+                                <input type="text" id="matchRegex" placeholder="admin|login|api">
+                                <span class="help-text" data-en="Regex to match URLs" data-bn="ইউআরএল ম্যাচ করার রেজেক্স">Regex to match URLs</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Filter Regex (-fr)" data-bn="ফিল্টার রেজেক্স (-fr)">Filter Regex (-fr)</label>
+                                <input type="text" id="filterRegex" placeholder="logout|signout">
+                                <span class="help-text" data-en="Regex to filter URLs" data-bn="ইউআরএল ফিল্টার করার রেজেক্স">Regex to filter URLs</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Field (-f)" data-bn="ফিল্ড (-f)">Field (-f)</label>
+                                <select id="field">
+                                    <option value="">Default</option>
+                                    <option value="url">URL</option>
+                                    <option value="path">Path</option>
+                                    <option value="fqdn">FQDN</option>
+                                    <option value="rdn">RDN</option>
+                                    <option value="rurl">RURL</option>
+                                    <option value="qurl">QURL</option>
+                                    <option value="qpath">QPATH</option>
+                                    <option value="file">File</option>
+                                    <option value="ufile">UFile</option>
+                                    <option value="key">Key</option>
+                                    <option value="value">Value</option>
+                                    <option value="kv">KV</option>
+                                    <option value="dir">Dir</option>
+                                    <option value="udir">UDir</option>
+                                </select>
+                                <span class="help-text" data-en="Field to display in output" data-bn="আউটপুটে প্রদর্শনের ফিল্ড">Field to display in output</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Store Field (-sf)" data-bn="স্টোর ফিল্ড (-sf)">Store Field (-sf)</label>
+                                <input type="text" id="storeField" placeholder="url,path">
+                                <span class="help-text" data-en="Field to store per-host" data-bn="প্রতি-হোস্টে স্টোর করার ফিল্ড">Field to store per-host</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Extension Match (-em)" data-bn="এক্সটেনশন ম্যাচ (-em)">Extension Match (-em)</label>
+                                <input type="text" id="extensionMatch" placeholder="php,html,js">
+                                <span class="help-text" data-en="Match these extensions" data-bn="এই এক্সটেনশনগুলি ম্যাচ করুন">Match these extensions</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Extension Filter (-ef)" data-bn="এক্সটেনশন ফিল্টার (-ef)">Extension Filter (-ef)</label>
+                                <input type="text" id="extensionFilter" placeholder="png,css,jpg">
+                                <span class="help-text" data-en="Filter these extensions" data-bn="এই এক্সটেনশনগুলি ফিল্টার করুন">Filter these extensions</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Match Condition (-mdc)" data-bn="ম্যাচ কন্ডিশন (-mdc)">Match Condition (-mdc)</label>
+                                <input type="text" id="matchCondition" placeholder="status_code==200">
+                                <span class="help-text" data-en="DSL-based match condition" data-bn="DSL-ভিত্তিক ম্যাচ কন্ডিশন">DSL-based match condition</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Filter Condition (-fdc)" data-bn="ফিল্টার কন্ডিশন (-fdc)">Filter Condition (-fdc)</label>
+                                <input type="text" id="filterCondition" placeholder="status_code!=404">
+                                <span class="help-text" data-en="DSL-based filter condition" data-bn="DSL-ভিত্তিক ফিল্টার কন্ডিশন">DSL-based filter condition</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noDefaultExtFilter">
+                                <label for="noDefaultExtFilter" data-en="No Default Ext Filter (-ndef)" data-bn="ডিফল্ট এক্সট ফিল্টার নেই (-ndef)">No Default Ext Filter (-ndef)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="disableUniqueFilter">
+                                <label for="disableUniqueFilter" data-en="Disable Unique Filter (-duf)" data-bn="ইউনিক ফিল্টার নিষ্ক্রিয় করুন (-duf)">Disable Unique Filter (-duf)</label>
                             </div>
                         </div>
                     </div>
@@ -1370,162 +1136,165 @@
                 <!-- Headless Tab -->
                 <div id="headless" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Headless Browser Options</h2>
+                        <h2 class="section-title">
+                            <span data-en="Headless Browser Options" data-bn="হেডলেস ব্রাউজার অপশন">Headless Browser Options</span>
+                        </h2>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Headless Options (-ho)</label>
-                                <textarea id="headlessOptions" placeholder="--disable-gpu&#10;--no-sandbox"></textarea>
-                                <span class="help-text">Additional Chrome options (one per line)</span>
+                                <label data-en="Headless Options (-ho)" data-bn="হেডলেস অপশন (-ho)">Headless Options (-ho)</label>
+                                <textarea id="headlessOptions" placeholder="--disable-gpu&#10;--window-size=1920,1080"></textarea>
+                                <span class="help-text" data-en="Additional Chrome options" data-bn="অতিরিক্ত ক্রোম অপশন">Additional Chrome options</span>
                             </div>
                             <div class="form-group">
-                                <label>Screenshot Timeout (-st)</label>
-                                <input type="number" id="screenshotTimeout" placeholder="10">
-                                <span class="help-text">Timeout in seconds (default: 10)</span>
+                                <label data-en="Chrome Data Dir (-cdd)" data-bn="ক্রোম ডেটা ডিরেক্টরি (-cdd)">Chrome Data Dir (-cdd)</label>
+                                <input type="text" id="chromeDataDir" placeholder="/path/to/chrome-data">
+                                <span class="help-text" data-en="Chrome browser data directory" data-bn="ক্রোম ব্রাউজার ডেটা ডিরেক্টরি">Chrome browser data directory</span>
                             </div>
                             <div class="form-group">
-                                <label>Screenshot Idle Time (-sid)</label>
-                                <input type="number" id="screenshotIdle" placeholder="1">
-                                <span class="help-text">Idle time before screenshot (default: 1s)</span>
+                                <label data-en="System Chrome Path (-scp)" data-bn="সিস্টেম ক্রোম পাথ (-scp)">System Chrome Path (-scp)</label>
+                                <input type="text" id="systemChromePath" placeholder="/usr/bin/google-chrome">
+                                <span class="help-text" data-en="Path to Chrome executable" data-bn="ক্রোম এক্সিকিউটেবলের পাথ">Path to Chrome executable</span>
                             </div>
                             <div class="form-group">
-                                <label>JavaScript Code (-jsc)</label>
-                                <textarea id="javascriptCode" placeholder="console.log('test');"></textarea>
-                                <span class="help-text">Execute JS after navigation</span>
+                                <label data-en="Chrome WebSocket URL (-cwu)" data-bn="ক্রোম ওয়েবসকেট ইউআরএল (-cwu)">Chrome WebSocket URL (-cwu)</label>
+                                <input type="text" id="chromeWsUrl" placeholder="ws://127.0.0.1:9222">
+                                <span class="help-text" data-en="Remote Chrome debugger URL" data-bn="রিমোট ক্রোম ডিবাগার ইউআরএল">Remote Chrome debugger URL</span>
                             </div>
                         </div>
                         <div class="checkbox-group" style="margin-top: 1.5rem;">
                             <div class="checkbox-item">
-                                <input type="checkbox" id="screenshot">
-                                <label for="screenshot">Enable Screenshot (-ss)</label>
+                                <input type="checkbox" id="headless">
+                                <label for="headless" data-en="Enable Headless (-hl)" data-bn="হেডলেস সক্ষম করুন (-hl)">Enable Headless (-hl)</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="systemChrome">
-                                <label for="systemChrome">Use System Chrome (-system-chrome)</label>
+                                <label for="systemChrome" data-en="System Chrome (-sc)" data-bn="সিস্টেম ক্রোম (-sc)">System Chrome (-sc)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="excludeScreenshotBytes">
-                                <label for="excludeScreenshotBytes">Exclude Screenshot Bytes (-esb)</label>
+                                <input type="checkbox" id="showBrowser">
+                                <label for="showBrowser" data-en="Show Browser (-sb)" data-bn="ব্রাউজার দেখান (-sb)">Show Browser (-sb)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="noScreenshotFullPage">
-                                <label for="noScreenshotFullPage">No Full Page Screenshot (-no-screenshot-full-page)</label>
+                                <input type="checkbox" id="noSandbox">
+                                <label for="noSandbox" data-en="No Sandbox (-nos)" data-bn="নো স্যান্ডবক্স (-nos)">No Sandbox (-nos)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="excludeHeadlessBody">
-                                <label for="excludeHeadlessBody">Exclude Headless Body (-ehb)</label>
+                                <input type="checkbox" id="noIncognito">
+                                <label for="noIncognito" data-en="No Incognito (-noi)" data-bn="নো ইনকগনিটো (-noi)">No Incognito (-noi)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="xhrExtraction">
+                                <label for="xhrExtraction" data-en="XHR Extraction (-xhr)" data-bn="XHR এক্সট্রাকশন (-xhr)">XHR Extraction (-xhr)</label>
                             </div>
                         </div>
                         <div class="info-box">
-                            💡 <strong>Note:</strong> Headless mode requires Chrome/Chromium to be installed
+                            💡 <strong data-en="Note:" data-bn="নোট:">Note:</strong> 
+                            <span data-en="Headless mode enables hybrid crawling for JavaScript-heavy sites" data-bn="হেডলেস মোড জাভাস্ক্রিপ্ট-ভারী সাইটগুলির জন্য হাইব্রিড ক্রলিং সক্ষম করে">Headless mode enables hybrid crawling for JavaScript-heavy sites</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Miscellaneous Tab -->
-                <div id="misc" class="tab-content">
+                <!-- Rate Limit Tab -->
+                <div id="ratelimit" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Miscellaneous Options</h2>
+                        <h2 class="section-title">
+                            <span data-en="Rate Limit & Performance" data-bn="রেট লিমিট এবং পারফরমেন্স">Rate Limit & Performance</span>
+                        </h2>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Ports (-p)</label>
-                                <input type="text" id="ports" placeholder="http:80,443,https:8443">
-                                <span class="help-text">Ports to probe (nmap syntax)</span>
+                                <label data-en="Concurrency (-c)" data-bn="কনকারেন্সি (-c)">Concurrency (-c)</label>
+                                <input type="number" id="concurrency" placeholder="10">
+                                <span class="help-text" data-en="Concurrent fetchers (default: 10)" data-bn="সমসাময়িক ফেচার (ডিফল্ট: 10)">Concurrent fetchers (default: 10)</span>
                             </div>
                             <div class="form-group">
-                                <label>Path (-path)</label>
-                                <input type="text" id="path" placeholder="/admin,/login,/api">
-                                <span class="help-text">Paths to probe (comma-separated or file)</span>
+                                <label data-en="Parallelism (-p)" data-bn="প্যারালেলিজম (-p)">Parallelism (-p)</label>
+                                <input type="number" id="parallelism" placeholder="10">
+                                <span class="help-text" data-en="Concurrent inputs (default: 10)" data-bn="সমসাময়িক ইনপুট (ডিফল্ট: 10)">Concurrent inputs (default: 10)</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Request Delay (-rd)" data-bn="রিকোয়েস্ট বিলম্ব (-rd)">Request Delay (-rd)</label>
+                                <input type="number" id="delay" placeholder="0">
+                                <span class="help-text" data-en="Delay between requests (seconds)" data-bn="রিকোয়েস্টের মধ্যে বিলম্ব (সেকেন্ড)">Delay between requests (seconds)</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Rate Limit Per Second (-rl)" data-bn="প্রতি সেকেন্ডে রেট লিমিট (-rl)">Rate Limit Per Second (-rl)</label>
+                                <input type="number" id="rateLimit" placeholder="150">
+                                <span class="help-text" data-en="Max requests/second (default: 150)" data-bn="সর্বোচ্চ রিকোয়েস্ট/সেকেন্ড (ডিফল্ট: 150)">Max requests/second (default: 150)</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Rate Limit Per Minute (-rlm)" data-bn="প্রতি মিনিটে রেট লিমিট (-rlm)">Rate Limit Per Minute (-rlm)</label>
+                                <input type="number" id="rateLimitMinute" placeholder="">
+                                <span class="help-text" data-en="Max requests per minute" data-bn="প্রতি মিনিটে সর্বোচ্চ রিকোয়েস্ট">Max requests per minute</span>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong data-en="Tip:" data-bn="টিপস:">Tip:</strong> 
+                            <span data-en="Adjust rate limits to avoid overwhelming target servers" data-bn="টার্গেট সার্ভারকে অভিভূত করা এড়াতে রেট লিমিট সামঞ্জস্য করুন">Adjust rate limits to avoid overwhelming target servers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Tab -->
+                <div id="output" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span data-en="Output Options" data-bn="আউটপুট অপশন">Output Options</span>
+                        </h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label data-en="Output File (-o)" data-bn="আউটপুট ফাইল (-o)">Output File (-o)</label>
+                                <input type="text" id="outputFile" placeholder="results.txt">
+                                <span class="help-text" data-en="File to write output" data-bn="আউটপুট লেখার ফাইল">File to write output</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Output Template (-ot)" data-bn="আউটপুট টেমপ্লেট (-ot)">Output Template (-ot)</label>
+                                <input type="text" id="outputTemplate" placeholder="{{.URL}} {{.Status}}">
+                                <span class="help-text" data-en="Custom output template" data-bn="কাস্টম আউটপুট টেমপ্লেট">Custom output template</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Store Response Dir (-srd)" data-bn="রেসপন্স ডিরেক্টরি স্টোর করুন (-srd)">Store Response Dir (-srd)</label>
+                                <input type="text" id="storeResponseDir" placeholder="./responses/">
+                                <span class="help-text" data-en="Custom response directory" data-bn="কাস্টম রেসপন্স ডিরেক্টরি">Custom response directory</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Store Field Dir (-sfd)" data-bn="ফিল্ড ডিরেক্টরি স্টোর করুন (-sfd)">Store Field Dir (-sfd)</label>
+                                <input type="text" id="storeFieldDir" placeholder="./fields/">
+                                <span class="help-text" data-en="Custom field storage directory" data-bn="কাস্টম ফিল্ড স্টোরেজ ডিরেক্টরি">Custom field storage directory</span>
+                            </div>
+                            <div class="form-group">
+                                <label data-en="Exclude Output Fields (-eof)" data-bn="আউটপুট ফিল্ড বাদ দিন (-eof)">Exclude Output Fields (-eof)</label>
+                                <input type="text" id="excludeOutputFields" placeholder="header,body">
+                                <span class="help-text" data-en="Fields to exclude from output" data-bn="আউটপুট থেকে বাদ দেওয়ার ফিল্ড">Fields to exclude from output</span>
                             </div>
                         </div>
                         <div class="checkbox-group" style="margin-top: 1.5rem;">
                             <div class="checkbox-item">
-                                <input type="checkbox" id="probeAllIps">
-                                <label for="probeAllIps">Probe All IPs (-pa)</label>
+                                <input type="checkbox" id="storeResponse">
+                                <label for="storeResponse" data-en="Store Response (-sr)" data-bn="রেসপন্স স্টোর করুন (-sr)">Store Response (-sr)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="tlsProbe">
-                                <label for="tlsProbe">TLS Probe (-tls-probe)</label>
+                                <input type="checkbox" id="noClobber">
+                                <label for="noClobber" data-en="No Clobber (-ncb)" data-bn="নো ক্লোবার (-ncb)">No Clobber (-ncb)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="cspProbe">
-                                <label for="cspProbe">CSP Probe (-csp-probe)</label>
+                                <input type="checkbox" id="omitRaw">
+                                <label for="omitRaw" data-en="Omit Raw (-or)" data-bn="র' বাদ দিন (-or)">Omit Raw (-or)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="tlsGrab">
-                                <label for="tlsGrab">TLS Grab (-tls-grab)</label>
+                                <input type="checkbox" id="omitBody">
+                                <label for="omitBody" data-en="Omit Body (-ob)" data-bn="বডি বাদ দিন (-ob)">Omit Body (-ob)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="pipeline">
-                                <label for="pipeline">HTTP Pipeline (-pipeline)</label>
+                                <input type="checkbox" id="listOutputFields">
+                                <label for="listOutputFields" data-en="List Output Fields (-lof)" data-bn="আউটপুট ফিল্ড তালিকা (-lof)">List Output Fields (-lof)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="http2">
-                                <label for="http2">HTTP/2 Support (-http2)</label>
+                                <input type="checkbox" id="jsonl">
+                                <label for="jsonl" data-en="JSONL Format (-j)" data-bn="JSONL ফরম্যাট (-j)">JSONL Format (-j)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="vhost">
-                                <label for="vhost">VHost Support (-vhost)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="listDslVariables">
-                                <label for="listDslVariables">List DSL Variables (-ldv)</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <h2 class="section-title">Extractor Options</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Extract Regex (-er)</label>
-                                <input type="text" id="extractRegex" placeholder="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
-                                <span class="help-text">Extract content with regex</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Extract Preset (-ep)</label>
-                                <input type="text" id="extractPreset" placeholder="url,ipv4,mail">
-                                <span class="help-text">Pre-defined extraction patterns</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <h2 class="section-title">Cloud Options</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Auth Config (-ac)</label>
-                                <input type="text" id="authConfig" placeholder="~/.pdcp/config.yaml">
-                                <span class="help-text">ProjectDiscovery Cloud auth config</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Team ID (-tid)</label>
-                                <input type="text" id="teamId" placeholder="">
-                                <span class="help-text">Upload to specific team</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Asset ID (-aid)</label>
-                                <input type="text" id="assetId" placeholder="">
-                                <span class="help-text">Upload to existing asset</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Asset Name (-aname)</label>
-                                <input type="text" id="assetName" placeholder="">
-                                <span class="help-text">Assets group name</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Dashboard Upload (-pdu)</label>
-                                <input type="text" id="dashboardUpload" placeholder="output.jsonl">
-                                <span class="help-text">Upload HTTPx output file</span>
-                            </div>
-                        </div>
-                        <div class="checkbox-group" style="margin-top: 1.5rem;">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="auth">
-                                <label for="auth">Configure Auth (-auth)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="dashboard">
-                                <label for="dashboard">Upload to Dashboard (-pd)</label>
+                                <input type="checkbox" id="noColor">
+                                <label for="noColor" data-en="No Color (-nc)" data-bn="নো কালার (-nc)">No Color (-nc)</label>
                             </div>
                         </div>
                     </div>
@@ -1534,125 +1303,53 @@
                 <!-- Debug Tab -->
                 <div id="debug" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Debug Options</h2>
+                        <h2 class="section-title">
+                            <span data-en="Debug & Update Options" data-bn="ডিবাগ এবং আপডেট অপশন">Debug & Update Options</span>
+                        </h2>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Profile Memory (-profile-mem)</label>
-                                <input type="text" id="profileMem" placeholder="mem.pprof">
-                                <span class="help-text">Memory profile dump file</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Stats Interval (-si)</label>
-                                <input type="number" id="statsInterval" placeholder="5">
-                                <span class="help-text">Seconds between stats updates (default: 5)</span>
+                                <label data-en="Error Log File (-elog)" data-bn="এরর লগ ফাইল (-elog)">Error Log File (-elog)</label>
+                                <input type="text" id="errorLog" placeholder="errors.log">
+                                <span class="help-text" data-en="File to write error logs" data-bn="এরর লগ লেখার ফাইল">File to write error logs</span>
                             </div>
                         </div>
                         <div class="checkbox-group" style="margin-top: 1.5rem;">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="healthCheck">
-                                <label for="healthCheck">Health Check (-hc)</label>
+                                <label for="healthCheck" data-en="Health Check (-hc)" data-bn="হেলথ চেক (-hc)">Health Check (-hc)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="debug">
-                                <label for="debug">Debug Mode (-debug)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="debugReq">
-                                <label for="debugReq">Debug Request (-debug-req)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="debugResp">
-                                <label for="debugResp">Debug Response (-debug-resp)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="version">
-                                <label for="version">Show Version (-version)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="stats">
-                                <label for="stats">Show Statistics (-stats)</label>
+                                <input type="checkbox" id="pprofServer">
+                                <label for="pprofServer" data-en="PProf Server (-pprof-server)" data-bn="PProf সার্ভার (-pprof-server)">PProf Server (-pprof-server)</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="silent">
-                                <label for="silent">Silent Mode (-silent)</label>
+                                <label for="silent" data-en="Silent Mode (-silent)" data-bn="সাইলেন্ট মোড (-silent)">Silent Mode (-silent)</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="verbose">
-                                <label for="verbose">Verbose Mode (-v)</label>
+                                <label for="verbose" data-en="Verbose Mode (-v)" data-bn="ভার্বোস মোড (-v)">Verbose Mode (-v)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="noColor">
-                                <label for="noColor">No Color (-nc)</label>
+                                <input type="checkbox" id="debug">
+                                <label for="debug" data-en="Debug Mode (-debug)" data-bn="ডিবাগ মোড (-debug)">Debug Mode (-debug)</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="trace">
-                                <label for="trace">Trace Mode (-tr)</label>
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            💡 <strong>Tip:</strong> Use -silent for clean output, -v for detailed information
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Optimization Tab -->
-                <div id="optimization" class="tab-content">
-                    <div class="section">
-                        <h2 class="section-title">Optimization</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Max Host Error (-maxhr)</label>
-                                <input type="number" id="maxHostError" placeholder="30">
-                                <span class="help-text">Max errors before skipping host (default: 30)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Exclude Hosts (-e)</label>
-                                <input type="text" id="exclude" placeholder="cdn,private-ips">
-                                <span class="help-text">Exclude pattern (cdn, private-ips, cidr, ip, regex)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Retries (-retries)</label>
-                                <input type="number" id="retries" placeholder="0">
-                                <span class="help-text">Number of retries for failed requests</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Timeout (-timeout)</label>
-                                <input type="number" id="timeout" placeholder="10">
-                                <span class="help-text">Timeout in seconds (default: 10)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Delay (-delay)</label>
-                                <input type="text" id="delay" placeholder="200ms">
-                                <span class="help-text">Duration between requests (e.g., 200ms, 1s)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Response Size to Save (-rsts)</label>
-                                <input type="number" id="responseSizeToSave" placeholder="">
-                                <span class="help-text">Max response size to save in bytes</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Response Size to Read (-rstr)</label>
-                                <input type="number" id="responseSizeToRead" placeholder="">
-                                <span class="help-text">Max response size to read in bytes</span>
-                            </div>
-                        </div>
-                        <div class="checkbox-group" style="margin-top: 1.5rem;">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="noFallback">
-                                <label for="noFallback">No Fallback (-nf)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="noFallbackScheme">
-                                <label for="noFallbackScheme">No Fallback Scheme (-nfs)</label>
+                                <input type="checkbox" id="version">
+                                <label for="version" data-en="Show Version (-version)" data-bn="ভার্সন দেখান (-version)">Show Version (-version)</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="update">
-                                <label for="update">Update HTTPx (-up)</label>
+                                <label for="update" data-en="Update Katana (-up)" data-bn="কাতানা আপডেট করুন (-up)">Update Katana (-up)</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="disableUpdateCheck">
-                                <label for="disableUpdateCheck">Disable Update Check (-duc)</label>
+                                <label for="disableUpdateCheck" data-en="Disable Update Check (-duc)" data-bn="আপডেট চেক নিষ্ক্রিয় করুন (-duc)">Disable Update Check (-duc)</label>
                             </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong data-en="Tip:" data-bn="টিপস:">Tip:</strong> 
+                            <span data-en="Use -silent for clean output, -v for detailed information" data-bn="পরিষ্কার আউটপুটের জন্য -silent ব্যবহার করুন, বিস্তারিত তথ্যের জন্য -v">Use -silent for clean output, -v for detailed information</span>
                         </div>
                     </div>
                 </div>
@@ -1660,20 +1357,47 @@
                 <!-- Command Output -->
                 <div class="command-output">
                     <div class="command-header">
-                        <span class="command-title">🚀 Generated HTTPx Command</span>
+                        <span class="command-title" data-en="🚀 Generated Katana Command" data-bn="🚀 জেনারেটেড কাতানা কমান্ড">🚀 Generated Katana Command</span>
                         <div class="button-group">
-                            <button class="example-btn" onclick="loadExample()">📝 Example</button>
-                            <button class="clear-btn" onclick="clearAll()">🗑️ Clear</button>
-                            <button class="copy-btn" onclick="copyCommand()">📋 Copy</button>
+                            <button class="example-btn" onclick="loadExample()">
+                                <span data-en="📝 Example" data-bn="📝 উদাহরণ">📝 Example</span>
+                            </button>
+                            <button class="clear-btn" onclick="clearAll()">
+                                <span data-en="🗑️ Clear" data-bn="🗑️ পরিষ্কার">🗑️ Clear</span>
+                            </button>
+                            <button class="copy-btn" onclick="copyCommand()">
+                                <span data-en="📋 Copy" data-bn="📋 কপি">📋 Copy</span>
+                            </button>
                         </div>
                     </div>
-                    <div class="command-text" id="commandOutput">httpx</div>
+                    <div class="command-text" id="commandOutput">katana</div>
                 </div>
             </main>
         </div>
     </div>
 
     <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            document.getElementById('langText').textContent = currentLang === 'en' ? 'বাংলা' : 'English';
+            
+            // Update all elements with data-en and data-bn attributes
+            document.querySelectorAll('[data-en][data-bn]').forEach(element => {
+                const text = element.getAttribute(`data-${currentLang}`);
+                if (element.tagName === 'INPUT' && element.type === 'text') {
+                    // Don't change input values
+                } else if (element.tagName === 'SPAN' || element.tagName === 'LABEL' || element.tagName === 'H1' || element.tagName === 'H2' || element.tagName === 'P' || element.tagName === 'STRONG') {
+                    element.textContent = text;
+                } else {
+                    element.innerHTML = text;
+                }
+            });
+            
+            showToast(currentLang === 'en' ? '✅ Language changed to English!' : '✅ ভাষা বাংলায় পরিবর্তিত হয়েছে!');
+        }
+
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const tabsContainer = document.querySelector('.tabs');
@@ -1723,13 +1447,12 @@
         });
 
         function generateCommand() {
-            let command = 'httpx';
+            let command = 'katana';
             
             // Input
             const targets = document.getElementById('targets').value.trim();
-            const targetList = document.getElementById('targetList').value.trim();
-            const rawRequest = document.getElementById('rawRequest').value.trim();
-            const inputMode = document.getElementById('inputMode').value;
+            const resume = document.getElementById('resume').value.trim();
+            const exclude = document.getElementById('exclude').value.trim();
             
             if (targets) {
                 const targetArray = targets.split('\n').map(d => d.trim()).filter(d => d);
@@ -1737,266 +1460,148 @@
                     command += ` -u ${target}`;
                 });
             }
-            if (targetList) command += ` -l ${targetList}`;
-            if (rawRequest) command += ` -rr ${rawRequest}`;
-            if (inputMode) command += ` -im ${inputMode}`;
-            
-            // Probes
-            if (document.getElementById('statusCode').checked) command += ' -sc';
-            if (document.getElementById('contentLength').checked) command += ' -cl';
-            if (document.getElementById('contentType').checked) command += ' -ct';
-            if (document.getElementById('location').checked) command += ' -location';
-            if (document.getElementById('favicon').checked) command += ' -favicon';
-            if (document.getElementById('jarm').checked) command += ' -jarm';
-            if (document.getElementById('responseTime').checked) command += ' -rt';
-            if (document.getElementById('lineCount').checked) command += ' -lc';
-            if (document.getElementById('wordCount').checked) command += ' -wc';
-            if (document.getElementById('title').checked) command += ' -title';
-            if (document.getElementById('webServer').checked) command += ' -server';
-            if (document.getElementById('techDetect').checked) command += ' -td';
-            if (document.getElementById('method').checked) command += ' -method';
-            if (document.getElementById('websocket').checked) command += ' -ws';
-            if (document.getElementById('ip').checked) command += ' -ip';
-            if (document.getElementById('cname').checked) command += ' -cname';
-            if (document.getElementById('asn').checked) command += ' -asn';
-            if (document.getElementById('cdn').checked) command += ' -cdn';
-            if (document.getElementById('probe').checked) command += ' -probe';
-            if (document.getElementById('cpe').checked) command += ' -cpe';
-            if (document.getElementById('wordpress').checked) command += ' -wp';
-            if (document.getElementById('extractFqdn').checked) command += ' -efqdn';
-            
-            const bodyPreview = document.getElementById('bodyPreview').value.trim();
-            const hashType = document.getElementById('hashType').value;
-            const customFingerprint = document.getElementById('customFingerprint').value.trim();
-            
-            if (bodyPreview) command += ` -bp ${bodyPreview}`;
-            if (hashType) command += ` -hash ${hashType}`;
-            if (customFingerprint) command += ` -cff ${customFingerprint}`;
-            
-            // Matchers
-            const matchCode = document.getElementById('matchCode').value.trim();
-            const matchLength = document.getElementById('matchLength').value.trim();
-            const matchLineCount = document.getElementById('matchLineCount').value.trim();
-            const matchWordCount = document.getElementById('matchWordCount').value.trim();
-            const matchFavicon = document.getElementById('matchFavicon').value.trim();
-            const matchString = document.getElementById('matchString').value.trim();
-            const matchRegex = document.getElementById('matchRegex').value.trim();
-            const matchCdn = document.getElementById('matchCdn').value.trim();
-            const matchResponseTime = document.getElementById('matchResponseTime').value.trim();
-            const matchCondition = document.getElementById('matchCondition').value.trim();
-            
-            if (matchCode) command += ` -mc ${matchCode}`;
-            if (matchLength) command += ` -ml ${matchLength}`;
-            if (matchLineCount) command += ` -mlc ${matchLineCount}`;
-            if (matchWordCount) command += ` -mwc ${matchWordCount}`;
-            if (matchFavicon) command += ` -mfc ${matchFavicon}`;
-            if (matchString) command += ` -ms ${matchString}`;
-            if (matchRegex) command += ` -mr ${matchRegex}`;
-            if (matchCdn) command += ` -mcdn ${matchCdn}`;
-            if (matchResponseTime) command += ` -mrt '${matchResponseTime}'`;
-            if (matchCondition) command += ` -mdc ${matchCondition}`;
-            
-            // Filters
-            const filterCode = document.getElementById('filterCode').value.trim();
-            const filterLength = document.getElementById('filterLength').value.trim();
-            const filterLineCount = document.getElementById('filterLineCount').value.trim();
-            const filterWordCount = document.getElementById('filterWordCount').value.trim();
-            const filterFavicon = document.getElementById('filterFavicon').value.trim();
-            const filterString = document.getElementById('filterString').value.trim();
-            const filterRegex = document.getElementById('filterRegex').value.trim();
-            const filterCdn = document.getElementById('filterCdn').value.trim();
-            const filterResponseTime = document.getElementById('filterResponseTime').value.trim();
-            const filterCondition = document.getElementById('filterCondition').value.trim();
-            const strip = document.getElementById('strip').value;
-            
-            if (filterCode) command += ` -fc ${filterCode}`;
-            if (filterLength) command += ` -fl ${filterLength}`;
-            if (filterLineCount) command += ` -flc ${filterLineCount}`;
-            if (filterWordCount) command += ` -fwc ${filterWordCount}`;
-            if (filterFavicon) command += ` -ffc ${filterFavicon}`;
-            if (filterString) command += ` -fs ${filterString}`;
-            if (filterRegex) command += ` -fe ${filterRegex}`;
-            if (filterCdn) command += ` -fcdn ${filterCdn}`;
-            if (filterResponseTime) command += ` -frt '${filterResponseTime}'`;
-            if (filterCondition) command += ` -fdc ${filterCondition}`;
-            if (strip) command += ` -strip ${strip}`;
-            if (document.getElementById('filterErrorPage').checked) command += ' -fep';
-            if (document.getElementById('filterDuplicates').checked) command += ' -fd';
-            
-            // Rate Limit
-            const threads = document.getElementById('threads').value.trim();
-            const rateLimit = document.getElementById('rateLimit').value.trim();
-            const rateLimitMinute = document.getElementById('rateLimitMinute').value.trim();
-            
-            if (threads) command += ` -t ${threads}`;
-            if (rateLimit) command += ` -rl ${rateLimit}`;
-            if (rateLimitMinute) command += ` -rlm ${rateLimitMinute}`;
-            
-            // Output
-            const outputFile = document.getElementById('outputFile').value.trim();
-            const outputAll = document.getElementById('outputAll').value.trim();
-            const storeResponseDir = document.getElementById('storeResponseDir').value.trim();
-            const csvEncoding = document.getElementById('csvEncoding').value.trim();
-            const protocol = document.getElementById('protocol').value;
-            const filterErrorPagePath = document.getElementById('filterErrorPagePath').value.trim();
-            const excludeFields = document.getElementById('excludeFields').value.trim();
-            
-            if (outputFile) command += ` -o ${outputFile}`;
-            if (outputAll) command += ` -oa ${outputAll}`;
-            if (document.getElementById('storeResponse').checked) command += ' -sr';
-            if (storeResponseDir) command += ` -srd ${storeResponseDir}`;
-            if (document.getElementById('omitBody').checked) command += ' -ob';
-            if (document.getElementById('csv').checked) command += ' -csv';
-            if (csvEncoding) command += ` -csvo ${csvEncoding}`;
-            if (document.getElementById('json').checked) command += ' -j';
-            if (document.getElementById('includeResponseHeader').checked) command += ' -irh';
-            if (document.getElementById('includeResponse').checked) command += ' -irr';
-            if (document.getElementById('includeResponseBase64').checked) command += ' -irrb';
-            if (document.getElementById('includeChain').checked) command += ' -include-chain';
-            if (document.getElementById('storeChain').checked) command += ' -store-chain';
-            if (document.getElementById('storeVisionRecon').checked) command += ' -svrc';
-            if (protocol) command += ` -pr ${protocol}`;
-            if (filterErrorPagePath) command += ` -fepp ${filterErrorPagePath}`;
-            if (document.getElementById('listOutputFields').checked) command += ' -lof';
-            if (excludeFields) command += ` -eof ${excludeFields}`;
+            if (resume) command += ` -resume ${resume}`;
+            if (exclude) command += ` -e ${exclude}`;
             
             // Configuration
-            const configFile = document.getElementById('configFile').value.trim();
             const resolvers = document.getElementById('resolvers').value.trim();
-            const allow = document.getElementById('allow').value.trim();
-            const deny = document.getElementById('deny').value.trim();
-            const sniName = document.getElementById('sniName').value.trim();
-            const headers = document.getElementById('headers').value.trim();
+            const depth = document.getElementById('depth').value.trim();
+            const crawlDuration = document.getElementById('crawlDuration').value.trim();
+            const knownFiles = document.getElementById('knownFiles').value;
+            const maxResponseSize = document.getElementById('maxResponseSize').value.trim();
+            const timeout = document.getElementById('timeout').value.trim();
+            const retry = document.getElementById('retry').value.trim();
             const proxy = document.getElementById('proxy').value.trim();
-            const methods = document.getElementById('methods').value.trim();
-            const body = document.getElementById('body').value.trim();
-            const maxRedirects = document.getElementById('maxRedirects').value.trim();
-            const secretFile = document.getElementById('secretFile').value.trim();
-            const httpApiEndpoint = document.getElementById('httpApiEndpoint').value.trim();
+            const headers = document.getElementById('headers').value.trim();
+            const configFile = document.getElementById('configFile').value.trim();
+            const formConfig = document.getElementById('formConfig').value.trim();
+            const fieldConfig = document.getElementById('fieldConfig').value.trim();
+            const strategy = document.getElementById('strategy').value;
             
-            if (configFile) command += ` -config ${configFile}`;
             if (resolvers) command += ` -r ${resolvers}`;
-            if (allow) command += ` -allow ${allow}`;
-            if (deny) command += ` -deny ${deny}`;
-            if (sniName) command += ` -sni ${sniName}`;
-            if (document.getElementById('randomAgent').checked) command += ' -random-agent';
-            if (document.getElementById('autoReferer').checked) command += ' -auto-referer';
+            if (depth) command += ` -d ${depth}`;
+            if (document.getElementById('jsCrawl').checked) command += ' -jc';
+            if (document.getElementById('jsluice').checked) command += ' -jsl';
+            if (crawlDuration) command += ` -ct ${crawlDuration}`;
+            if (knownFiles) command += ` -kf ${knownFiles}`;
+            if (maxResponseSize) command += ` -mrs ${maxResponseSize}`;
+            if (timeout) command += ` -timeout ${timeout}`;
+            if (document.getElementById('automaticFormFill').checked) command += ' -aff';
+            if (document.getElementById('formExtraction').checked) command += ' -fx';
+            if (retry) command += ` -retry ${retry}`;
+            if (proxy) command += ` -proxy ${proxy}`;
+            if (document.getElementById('techDetect').checked) command += ' -td';
             if (headers) {
                 const headerArray = headers.split('\n').map(h => h.trim()).filter(h => h);
                 headerArray.forEach(header => {
                     command += ` -H "${header}"`;
                 });
             }
-            if (proxy) command += ` -proxy ${proxy}`;
-            if (document.getElementById('unsafe').checked) command += ' -unsafe';
-            if (document.getElementById('resume').checked) command += ' -resume';
-            if (document.getElementById('followRedirects').checked) command += ' -fr';
-            if (maxRedirects) command += ` -maxr ${maxRedirects}`;
-            if (document.getElementById('followHostRedirects').checked) command += ' -fhr';
-            if (document.getElementById('respectHsts').checked) command += ' -rhsts';
-            if (document.getElementById('vhostInput').checked) command += ' -vhost-input';
-            if (methods) command += ` -x ${methods}`;
-            if (body) command += ` -body '${body}'`;
-            if (document.getElementById('stream').checked) command += ' -s';
-            if (document.getElementById('skipDedupe').checked) command += ' -sd';
-            if (document.getElementById('leaveDefaultPorts').checked) command += ' -ldp';
-            if (document.getElementById('ztls').checked) command += ' -ztls';
-            if (document.getElementById('noDecode').checked) command += ' -no-decode';
+            if (configFile) command += ` -config ${configFile}`;
+            if (formConfig) command += ` -fc ${formConfig}`;
+            if (fieldConfig) command += ` -flc ${fieldConfig}`;
+            if (strategy && strategy !== 'depth-first') command += ` -s ${strategy}`;
+            if (document.getElementById('ignoreQueryParams').checked) command += ' -iqp';
             if (document.getElementById('tlsImpersonate').checked) command += ' -tlsi';
-            if (document.getElementById('noStdin').checked) command += ' -no-stdin';
-            if (secretFile) command += ` -sf ${secretFile}`;
-            if (httpApiEndpoint) command += ` -hae ${httpApiEndpoint}`;
+            if (document.getElementById('disableRedirects').checked) command += ' -dr';
+            
+            // Scope
+            const crawlScope = document.getElementById('crawlScope').value.trim();
+            const crawlOutScope = document.getElementById('crawlOutScope').value.trim();
+            const fieldScope = document.getElementById('fieldScope').value;
+            
+            if (crawlScope) command += ` -cs "${crawlScope}"`;
+            if (crawlOutScope) command += ` -cos "${crawlOutScope}"`;
+            if (fieldScope && fieldScope !== 'rdn') command += ` -fs ${fieldScope}`;
+            if (document.getElementById('noScope').checked) command += ' -ns';
+            if (document.getElementById('displayOutScope').checked) command += ' -do';
+            
+            // Filter
+            const matchRegex = document.getElementById('matchRegex').value.trim();
+            const filterRegex = document.getElementById('filterRegex').value.trim();
+            const field = document.getElementById('field').value;
+            const storeField = document.getElementById('storeField').value.trim();
+            const extensionMatch = document.getElementById('extensionMatch').value.trim();
+            const extensionFilter = document.getElementById('extensionFilter').value.trim();
+            const matchCondition = document.getElementById('matchCondition').value.trim();
+            const filterCondition = document.getElementById('filterCondition').value.trim();
+            
+            if (matchRegex) command += ` -mr "${matchRegex}"`;
+            if (filterRegex) command += ` -fr "${filterRegex}"`;
+            if (field) command += ` -f ${field}`;
+            if (storeField) command += ` -sf ${storeField}`;
+            if (extensionMatch) command += ` -em ${extensionMatch}`;
+            if (extensionFilter) command += ` -ef ${extensionFilter}`;
+            if (document.getElementById('noDefaultExtFilter').checked) command += ' -ndef';
+            if (matchCondition) command += ` -mdc "${matchCondition}"`;
+            if (filterCondition) command += ` -fdc "${filterCondition}"`;
+            if (document.getElementById('disableUniqueFilter').checked) command += ' -duf';
             
             // Headless
             const headlessOptions = document.getElementById('headlessOptions').value.trim();
-            const screenshotTimeout = document.getElementById('screenshotTimeout').value.trim();
-            const screenshotIdle = document.getElementById('screenshotIdle').value.trim();
-            const javascriptCode = document.getElementById('javascriptCode').value.trim();
+            const chromeDataDir = document.getElementById('chromeDataDir').value.trim();
+            const systemChromePath = document.getElementById('systemChromePath').value.trim();
+            const chromeWsUrl = document.getElementById('chromeWsUrl').value.trim();
             
-            if (document.getElementById('screenshot').checked) command += ' -ss';
-            if (document.getElementById('systemChrome').checked) command += ' -system-chrome';
+            if (document.getElementById('headless').checked) command += ' -hl';
+            if (document.getElementById('systemChrome').checked) command += ' -sc';
+            if (document.getElementById('showBrowser').checked) command += ' -sb';
             if (headlessOptions) {
                 const optionArray = headlessOptions.split('\n').map(o => o.trim()).filter(o => o);
                 optionArray.forEach(option => {
                     command += ` -ho "${option}"`;
                 });
             }
-            if (document.getElementById('excludeScreenshotBytes').checked) command += ' -esb';
-            if (document.getElementById('noScreenshotFullPage').checked) command += ' -no-screenshot-full-page';
-            if (document.getElementById('excludeHeadlessBody').checked) command += ' -ehb';
-            if (screenshotTimeout) command += ` -st ${screenshotTimeout}`;
-            if (screenshotIdle) command += ` -sid ${screenshotIdle}`;
-            if (javascriptCode) command += ` -jsc "${javascriptCode}"`;
+            if (document.getElementById('noSandbox').checked) command += ' -nos';
+            if (chromeDataDir) command += ` -cdd ${chromeDataDir}`;
+            if (systemChromePath) command += ` -scp ${systemChromePath}`;
+            if (document.getElementById('noIncognito').checked) command += ' -noi';
+            if (chromeWsUrl) command += ` -cwu ${chromeWsUrl}`;
+            if (document.getElementById('xhrExtraction').checked) command += ' -xhr';
             
-            // Miscellaneous
-            const ports = document.getElementById('ports').value.trim();
-            const path = document.getElementById('path').value.trim();
-            const extractRegex = document.getElementById('extractRegex').value.trim();
-            const extractPreset = document.getElementById('extractPreset').value.trim();
+            // Rate Limit
+            const concurrency = document.getElementById('concurrency').value.trim();
+            const parallelism = document.getElementById('parallelism').value.trim();
+            const delay = document.getElementById('delay').value.trim();
+            const rateLimit = document.getElementById('rateLimit').value.trim();
+            const rateLimitMinute = document.getElementById('rateLimitMinute').value.trim();
             
-            if (document.getElementById('probeAllIps').checked) command += ' -pa';
-            if (ports) command += ` -p ${ports}`;
-            if (path) command += ` -path ${path}`;
-            if (document.getElementById('tlsProbe').checked) command += ' -tls-probe';
-            if (document.getElementById('cspProbe').checked) command += ' -csp-probe';
-            if (document.getElementById('tlsGrab').checked) command += ' -tls-grab';
-            if (document.getElementById('pipeline').checked) command += ' -pipeline';
-            if (document.getElementById('http2').checked) command += ' -http2';
-            if (document.getElementById('vhost').checked) command += ' -vhost';
-            if (document.getElementById('listDslVariables').checked) command += ' -ldv';
-            if (extractRegex) command += ` -er "${extractRegex}"`;
-            if (extractPreset) command += ` -ep ${extractPreset}`;
+            if (concurrency) command += ` -c ${concurrency}`;
+            if (parallelism) command += ` -p ${parallelism}`;
+            if (delay) command += ` -rd ${delay}`;
+            if (rateLimit) command += ` -rl ${rateLimit}`;
+            if (rateLimitMinute) command += ` -rlm ${rateLimitMinute}`;
             
-            // Cloud
-            const authConfig = document.getElementById('authConfig').value.trim();
-            const teamId = document.getElementById('teamId').value.trim();
-            const assetId = document.getElementById('assetId').value.trim();
-            const assetName = document.getElementById('assetName').value.trim();
-            const dashboardUpload = document.getElementById('dashboardUpload').value.trim();
+            // Output
+            const outputFile = document.getElementById('outputFile').value.trim();
+            const outputTemplate = document.getElementById('outputTemplate').value.trim();
+            const storeResponseDir = document.getElementById('storeResponseDir').value.trim();
+            const storeFieldDir = document.getElementById('storeFieldDir').value.trim();
+            const excludeOutputFields = document.getElementById('excludeOutputFields').value.trim();
             
-            if (document.getElementById('auth').checked) command += ' -auth';
-            if (authConfig) command += ` -ac ${authConfig}`;
-            if (document.getElementById('dashboard').checked) command += ' -pd';
-            if (teamId) command += ` -tid ${teamId}`;
-            if (assetId) command += ` -aid ${assetId}`;
-            if (assetName) command += ` -aname ${assetName}`;
-            if (dashboardUpload) command += ` -pdu ${dashboardUpload}`;
+            if (outputFile) command += ` -o ${outputFile}`;
+            if (outputTemplate) command += ` -ot "${outputTemplate}"`;
+            if (document.getElementById('storeResponse').checked) command += ' -sr';
+            if (storeResponseDir) command += ` -srd ${storeResponseDir}`;
+            if (document.getElementById('noClobber').checked) command += ' -ncb';
+            if (storeFieldDir) command += ` -sfd ${storeFieldDir}`;
+            if (document.getElementById('omitRaw').checked) command += ' -or';
+            if (document.getElementById('omitBody').checked) command += ' -ob';
+            if (document.getElementById('listOutputFields').checked) command += ' -lof';
+            if (excludeOutputFields) command += ` -eof ${excludeOutputFields}`;
+            if (document.getElementById('jsonl').checked) command += ' -j';
+            if (document.getElementById('noColor').checked) command += ' -nc';
             
             // Debug
-            const profileMem = document.getElementById('profileMem').value.trim();
-            const statsInterval = document.getElementById('statsInterval').value.trim();
+            const errorLog = document.getElementById('errorLog').value.trim();
             
             if (document.getElementById('healthCheck').checked) command += ' -hc';
-            if (document.getElementById('debug').checked) command += ' -debug';
-            if (document.getElementById('debugReq').checked) command += ' -debug-req';
-            if (document.getElementById('debugResp').checked) command += ' -debug-resp';
-            if (document.getElementById('version').checked) command += ' -version';
-            if (document.getElementById('stats').checked) command += ' -stats';
-            if (profileMem) command += ` -profile-mem ${profileMem}`;
+            if (errorLog) command += ` -elog ${errorLog}`;
+            if (document.getElementById('pprofServer').checked) command += ' -pprof-server';
             if (document.getElementById('silent').checked) command += ' -silent';
             if (document.getElementById('verbose').checked) command += ' -v';
-            if (statsInterval) command += ` -si ${statsInterval}`;
-            if (document.getElementById('noColor').checked) command += ' -nc';
-            if (document.getElementById('trace').checked) command += ' -tr';
-            
-            // Optimization
-            const maxHostError = document.getElementById('maxHostError').value.trim();
-            const exclude = document.getElementById('exclude').value.trim();
-            const retries = document.getElementById('retries').value.trim();
-            const timeout = document.getElementById('timeout').value.trim();
-            const delay = document.getElementById('delay').value.trim();
-            const responseSizeToSave = document.getElementById('responseSizeToSave').value.trim();
-            const responseSizeToRead = document.getElementById('responseSizeToRead').value.trim();
-            
-            if (document.getElementById('noFallback').checked) command += ' -nf';
-            if (document.getElementById('noFallbackScheme').checked) command += ' -nfs';
-            if (maxHostError) command += ` -maxhr ${maxHostError}`;
-            if (exclude) command += ` -e ${exclude}`;
-            if (retries) command += ` -retries ${retries}`;
-            if (timeout) command += ` -timeout ${timeout}`;
-            if (delay) command += ` -delay ${delay}`;
-            if (responseSizeToSave) command += ` -rsts ${responseSizeToSave}`;
-            if (responseSizeToRead) command += ` -rstr ${responseSizeToRead}`;
+            if (document.getElementById('debug').checked) command += ' -debug';
+            if (document.getElementById('version').checked) command += ' -version';
             if (document.getElementById('update').checked) command += ' -up';
             if (document.getElementById('disableUpdateCheck').checked) command += ' -duc';
             
@@ -2006,31 +1611,34 @@
         function copyCommand() {
             const commandText = document.getElementById('commandOutput').textContent;
             navigator.clipboard.writeText(commandText).then(() => {
-                showToast('✅ Command copied to clipboard!');
+                showToast(currentLang === 'en' ? '✅ Command copied to clipboard!' : '✅ কমান্ড ক্লিপবোর্ডে কপি হয়েছে!');
             });
         }
 
         function clearAll() {
             document.querySelectorAll('input[type="text"], input[type="number"], textarea, select').forEach(input => {
-                input.value = '';
+                if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = '';
+                }
             });
             document.querySelectorAll('input[type="checkbox"]').forEach(input => {
                 input.checked = false;
             });
             generateCommand();
-            showToast('🗑️ All fields cleared!');
+            showToast(currentLang === 'en' ? '🗑️ All fields cleared!' : '🗑️ সব ফিল্ড পরিষ্কার হয়েছে!');
         }
 
         function loadExample() {
             clearAll();
             document.getElementById('targets').value = 'https://example.com';
-            document.getElementById('statusCode').checked = true;
-            document.getElementById('title').checked = true;
-            document.getElementById('techDetect').checked = true;
+            document.getElementById('depth').value = '3';
+            document.getElementById('jsCrawl').checked = true;
             document.getElementById('verbose').checked = true;
-            document.getElementById('outputFile').value = 'results.txt';
+            document.getElementById('outputFile').value = 'crawl-results.txt';
             generateCommand();
-            showToast('📝 Example loaded!');
+            showToast(currentLang === 'en' ? '📝 Example loaded!' : '📝 উদাহরণ লোড হয়েছে!');
         }
 
         function showToast(message) {
