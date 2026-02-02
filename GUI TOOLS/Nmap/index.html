@@ -834,11 +834,11 @@
         <header>
             <div class="logo-container">
                 <div class="logo">
-                    <img src="Logo/rabbiInfosec.png" alt="Rabbi Infosec Logo">
+                    <img src="Logo/rabbiInfosec.png" alt="this is my logo">
                 </div>
             </div>
             <div class="header-content">
-                <h1> Professional Nmap Command Builder </h1>
+                <h1>Professional Nmap Command Builder</h1>
                 <p class="subtitle">Complete Network Scanning Tool - All Nmap Options Included</p>
             </div>
             <a href=""><div class="developer-credit">Developed by CSRR</div></a>
@@ -862,10 +862,10 @@
             </aside>
 
             <main class="content-area">
-                <!-- Target Tab -->
+                <!-- 1. Target Specification -->
                 <div id="target" class="tab-content active">
                     <div class="section">
-                        <h2 class="section-title">Target Specification</h2>
+                        <h2 class="section-title">Target Specification (5 Commands)</h2>
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Target Host/Network</label>
@@ -899,10 +899,10 @@
                     </div>
                 </div>
 
-                <!-- Discovery Tab -->
+                <!-- 2. Host Discovery -->
                 <div id="discovery" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Host Discovery Options</h2>
+                        <h2 class="section-title">Host Discovery Options (12 Commands)</h2>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="sL">
@@ -986,10 +986,10 @@
                     </div>
                 </div>
 
-                <!-- Scan Techniques Tab -->
+                <!-- 3. Scan Techniques -->
                 <div id="scan" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Scan Techniques</h2>
+                        <h2 class="section-title">Scan Techniques (14 Commands)</h2>
                         <div class="radio-group">
                             <div class="radio-item">
                                 <input type="radio" name="scanType" id="sS" value="-sS">
@@ -1059,10 +1059,10 @@
                     </div>
                 </div>
 
-                <!-- Ports Tab -->
+                <!-- 4. Port Specification -->
                 <div id="ports" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Port Specification & Scan Order</h2>
+                        <h2 class="section-title">Port Specification & Scan Order (6 Commands)</h2>
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Port Range (-p)</label>
@@ -1101,10 +1101,10 @@
                     </div>
                 </div>
 
-                <!-- Service/Version Tab -->
+                <!-- 5. Service/Version Detection -->
                 <div id="service" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Service/Version Detection</h2>
+                        <h2 class="section-title">Service/Version Detection (5 Commands)</h2>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="sV">
@@ -1136,10 +1136,10 @@
                     </div>
                 </div>
 
-                <!-- Scripts Tab -->
+                <!-- 6. NSE Scripts -->
                 <div id="scripts" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">NSE Script Scan</h2>
+                        <h2 class="section-title">NSE Script Scan (7 Commands)</h2>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="sC">
@@ -1179,10 +1179,10 @@
                     </div>
                 </div>
 
-                <!-- OS Detection Tab -->
+                <!-- 7. OS Detection -->
                 <div id="os" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">OS Detection</h2>
+                        <h2 class="section-title">OS Detection (3 Commands)</h2>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="osDetection">
@@ -1200,10 +1200,10 @@
                     </div>
                 </div>
 
-                <!-- Timing Tab -->
+                <!-- 8. Timing & Performance -->
                 <div id="timing" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Timing & Performance</h2>
+                        <h2 class="section-title">Timing & Performance (14 Commands)</h2>
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Timing Template (-T&lt;0-5&gt;)</label>
@@ -1276,10 +1276,10 @@
                     </div>
                 </div>
 
-                <!-- Evasion Tab -->
+                <!-- 9. Firewall/IDS Evasion -->
                 <div id="evasion" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Firewall/IDS Evasion & Spoofing</h2>
+                        <h2 class="section-title">Firewall/IDS Evasion & Spoofing (15 Commands)</h2>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="fragmentPackets">
@@ -1347,10 +1347,10 @@
                     </div>
                 </div>
 
-                <!-- Output Tab -->
+                <!-- 10. Output -->
                 <div id="output" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Output Options</h2>
+                        <h2 class="section-title">Output Options (17 Commands)</h2>
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Normal Output (-oN)</label>
@@ -1411,18 +1411,6 @@
                                 <input type="checkbox" id="appendOutput">
                                 <label for="appendOutput">Append Output (--append-output)</label>
                             </div>
-                        </div>
-                        <div class="form-grid" style="margin-top: 1.5rem;">
-                            <div class="form-group">
-                                <label>Resume Scan (--resume)</label>
-                                <input type="text" id="resumeFile" placeholder="previous_scan.xml">
-                            </div>
-                            <div class="form-group">
-                                <label>Stylesheet (--stylesheet)</label>
-                                <input type="text" id="stylesheet" placeholder="path/to/style.xsl">
-                            </div>
-                        </div>
-                        <div class="checkbox-group" style="margin-top: 1rem;">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="noninteractive">
                                 <label for="noninteractive">Non-interactive (--noninteractive)</label>
@@ -1436,13 +1424,23 @@
                                 <label for="noStylesheet">No Stylesheet (--no-stylesheet)</label>
                             </div>
                         </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Resume Scan (--resume)</label>
+                                <input type="text" id="resumeFile" placeholder="previous_scan.xml">
+                            </div>
+                            <div class="form-group">
+                                <label>Stylesheet (--stylesheet)</label>
+                                <input type="text" id="stylesheet" placeholder="path/to/style.xsl">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Misc Tab -->
+                <!-- 11. Miscellaneous -->
                 <div id="misc" class="tab-content">
                     <div class="section">
-                        <h2 class="section-title">Miscellaneous Options</h2>
+                        <h2 class="section-title">Miscellaneous Options (9 Commands)</h2>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="ipv6">
@@ -1467,6 +1465,14 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="unprivileged">
                                 <label for="unprivileged">Unprivileged Mode (--unprivileged)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="printVersion">
+                                <label for="printVersion">Print Version (-V)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="printHelp">
+                                <label for="printHelp">Print Help (-h)</label>
                             </div>
                         </div>
                         <div class="form-grid" style="margin-top: 1.5rem;">
@@ -1556,24 +1562,18 @@
             const hasFile = inputFileField.value.trim() !== '';
             const hasRandom = randomTargetsField.value.trim() !== '';
 
-            // If targets has value, disable file and random
             if (hasTargets) {
                 inputFileField.disabled = true;
                 randomTargetsField.disabled = true;
-            } 
-            // If file or random has value, disable targets
-            else if (hasFile || hasRandom) {
+            } else if (hasFile || hasRandom) {
                 targetsInput.disabled = true;
-            } 
-            // If all are empty, enable all
-            else {
+            } else {
                 targetsInput.disabled = false;
                 inputFileField.disabled = false;
                 randomTargetsField.disabled = false;
             }
         }
 
-        // Add event listeners for mutual exclusion
         targetsInput.addEventListener('input', updateInputStates);
         inputFileField.addEventListener('input', updateInputStates);
         randomTargetsField.addEventListener('input', updateInputStates);
@@ -1581,6 +1581,7 @@
         function generateCommand() {
             let command = 'nmap';
             
+            // 1. Target Specification
             const targets = document.getElementById('targets').value.trim();
             const inputFile = document.getElementById('inputFile').value.trim();
             const randomTargets = document.getElementById('randomTargets').value.trim();
@@ -1592,6 +1593,7 @@
             if (exclude) command += ` --exclude ${exclude}`;
             if (excludeFile) command += ` --excludefile ${excludeFile}`;
             
+            // 2. Host Discovery
             if (document.getElementById('sL').checked) command += ' -sL';
             if (document.getElementById('sn').checked) command += ' -sn';
             if (document.getElementById('Pn').checked) command += ' -Pn';
@@ -1619,6 +1621,7 @@
             
             if (document.getElementById('systemDns').checked) command += ' --system-dns';
             
+            // 3. Scan Techniques
             const scanType = document.querySelector('input[name="scanType"]:checked');
             if (scanType) command += ` ${scanType.value}`;
             
@@ -1631,6 +1634,7 @@
             const ftpBounce = document.getElementById('ftpBounce').value.trim();
             if (ftpBounce) command += ` -b ${ftpBounce}`;
             
+            // 4. Port Specification
             const portRange = document.getElementById('portRange').value.trim();
             const topPorts = document.getElementById('topPorts').value.trim();
             const excludePorts = document.getElementById('excludePorts').value.trim();
@@ -1649,6 +1653,7 @@
             if (document.getElementById('fastScan').checked) command += ' -F';
             if (document.getElementById('sequential').checked) command += ' -r';
             
+            // 5. Service/Version Detection
             if (document.getElementById('sV').checked) command += ' -sV';
             if (document.getElementById('versionLight').checked) command += ' --version-light';
             if (document.getElementById('versionAll').checked) command += ' --version-all';
@@ -1657,6 +1662,7 @@
             const versionIntensity = document.getElementById('versionIntensity').value.trim();
             if (versionIntensity) command += ` --version-intensity ${versionIntensity}`;
             
+            // 6. NSE Scripts
             if (document.getElementById('sC').checked) command += ' -sC';
             if (document.getElementById('scriptTrace').checked) command += ' --script-trace';
             if (document.getElementById('scriptUpdatedb').checked) command += ' --script-updatedb';
@@ -1671,6 +1677,7 @@
             if (scriptArgsFile) command += ` --script-args-file=${scriptArgsFile}`;
             if (scriptHelp) command += ` --script-help=${scriptHelp}`;
             
+            // 7. OS Detection
             if (document.getElementById('aggressiveScan').checked) {
                 command += ' -A';
             } else {
@@ -1679,6 +1686,7 @@
                 if (document.getElementById('osscanGuess').checked) command += ' --osscan-guess';
             }
             
+            // 8. Timing & Performance
             const timingTemplate = document.getElementById('timingTemplate').value;
             if (timingTemplate) command += ` ${timingTemplate}`;
             
@@ -1710,6 +1718,7 @@
             if (minRate) command += ` --min-rate ${minRate}`;
             if (maxRate) command += ` --max-rate ${maxRate}`;
             
+            // 9. Firewall/IDS Evasion
             if (document.getElementById('fragmentPackets').checked) command += ' -f';
             if (document.getElementById('badsum').checked) command += ' --badsum';
             
@@ -1739,6 +1748,7 @@
             if (ttl) command += ` --ttl ${ttl}`;
             if (spoofMAC) command += ` --spoof-mac ${spoofMAC}`;
             
+            // 10. Output
             const outputNormal = document.getElementById('outputNormal').value.trim();
             const outputXML = document.getElementById('outputXML').value.trim();
             const outputScript = document.getElementById('outputScript').value.trim();
@@ -1779,15 +1789,19 @@
             if (document.getElementById('webxml').checked) command += ' --webxml';
             if (document.getElementById('noStylesheet').checked) command += ' --no-stylesheet';
             
+            // 11. Miscellaneous
             if (document.getElementById('ipv6').checked) command += ' -6';
             if (document.getElementById('sendEth').checked) command += ' --send-eth';
             if (document.getElementById('sendIp').checked) command += ' --send-ip';
             if (document.getElementById('privileged').checked) command += ' --privileged';
             if (document.getElementById('unprivileged').checked) command += ' --unprivileged';
+            if (document.getElementById('printVersion').checked) command += ' -V';
+            if (document.getElementById('printHelp').checked) command += ' -h';
             
             const datadir = document.getElementById('datadir').value.trim();
             if (datadir) command += ` --datadir ${datadir}`;
             
+            // Add targets at the end
             if (targets) {
                 const targetList = targets.split(/[\n,]/).map(t => t.trim()).filter(t => t).join(' ');
                 command += ` ${targetList}`;
@@ -1806,7 +1820,7 @@
         function clearAll() {
             document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(input => {
                 input.value = '';
-                input.disabled = false; // Re-enable all inputs
+                input.disabled = false;
             });
             document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
                 input.checked = false;
@@ -1827,7 +1841,7 @@
             document.getElementById('osDetection').checked = true;
             document.getElementById('timingTemplate').value = '-T4';
             document.getElementById('verbose').checked = true;
-            updateInputStates(); // Update states after loading example
+            updateInputStates();
             generateCommand();
             showToast('📝 Example loaded!');
         }
