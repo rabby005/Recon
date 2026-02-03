@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional HTTPx Command Builder</title>
+    <link rel="icon" href="Logo/rabbiInfosec3.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Spline+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #151922;
+            --bg-tertiary: #1e242e;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #6c5ce7;
+            --accent-tertiary: #00b894;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+            --border-color: #2d3748;
+            --shadow: 0 8px 32px rgba(0, 217, 255, 0.15);
+            --glow: 0 0 20px rgba(0, 217, 255, 0.3);
+            --accent-koro: #e84393;
+            --glow-koro: 0 0 20px rgba(232, 67, 147, 0.3);
+            --shadow-koro: 0 8px 32px rgba(232, 67, 147, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Spline Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 60% 20%, rgba(232, 67, 147, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            animation: fadeIn 0.6s ease-out;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: clamp(1.75rem, 5vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            padding: 0 1rem;
+        }
+
+        .developer-credit {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(108, 92, 231, 0.15));
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            box-shadow: var(--glow);
+            animation: fadeIn 0.8s ease-out 0.3s backwards;
+            white-space: nowrap;
+            justify-self: end;
+            text-decoration: none;
+        }
+
+        .developer-credit::before {
+            content: '💻';
+            margin-right: 0.5rem;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.4);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        .logo img {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .tab {
+            padding: 1rem 1.25rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: 'Spline Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(108, 92, 231, 0.2));
+            color: var(--accent-primary);
+            box-shadow: var(--glow);
+        }
+
+        .tab.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* Koro tab special styling */
+        .tab[data-tab="koro"]:hover {
+            background: rgba(232, 67, 147, 0.1);
+        }
+        .tab[data-tab="koro"].active {
+            background: linear-gradient(135deg, rgba(232, 67, 147, 0.2), rgba(108, 92, 231, 0.2));
+            color: var(--accent-koro);
+            box-shadow: var(--glow-koro);
+        }
+        .tab[data-tab="koro"].active::before {
+            background: linear-gradient(180deg, var(--accent-koro), var(--accent-secondary));
+        }
+
+        @media (min-width: 1025px) {
+            .tab:hover {
+                transform: translateX(4px);
+            }
+            
+            .tab.active {
+                transform: translateX(4px);
+            }
+        }
+
+        .content-area {
+            min-height: 600px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInContent 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow);
+        }
+
+        /* Koro section special hover */
+        .koro-section:hover {
+            border-color: var(--accent-koro) !important;
+            box-shadow: var(--shadow-koro) !important;
+        }
+
+        .section-title {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Koro section title */
+        .koro-section .section-title {
+            color: var(--accent-koro);
+        }
+        .koro-section .section-title::before {
+            background: linear-gradient(180deg, var(--accent-koro), var(--accent-secondary));
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 0.875rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+
+        /* Koro inputs focus */
+        .koro-section input[type="text"]:focus,
+        .koro-section input[type="number"]:focus,
+        .koro-section select:focus,
+        .koro-section textarea:focus {
+            border-color: var(--accent-koro);
+            box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(0, 217, 255, 0.05);
+            border-color: var(--accent-primary);
+        }
+
+        /* Koro checkbox hover */
+        .koro-section .checkbox-item:hover {
+            background: rgba(232, 67, 147, 0.07);
+            border-color: var(--accent-koro);
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent-primary);
+            flex-shrink: 0;
+        }
+
+        .koro-section input[type="checkbox"] {
+            accent-color: var(--accent-koro);
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            margin: 0;
+            color: var(--text-primary);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 400;
+        }
+
+        .command-output {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid var(--accent-primary);
+            box-shadow: var(--glow);
+            margin-top: 2rem;
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .command-title {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .copy-btn,
+        .clear-btn,
+        .example-btn {
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Spline Sans', sans-serif;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+            white-space: nowrap;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .example-btn {
+            background: linear-gradient(135deg, var(--accent-tertiary), #00a67d);
+            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+        }
+
+        .copy-btn:hover,
+        .clear-btn:hover,
+        .example-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+        }
+
+        .copy-btn:active,
+        .clear-btn:active,
+        .example-btn:active {
+            transform: translateY(0);
+        }
+
+        .command-text {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.75rem, 2vw, 0.95rem);
+            color: var(--accent-primary);
+            word-wrap: break-word;
+            word-break: break-all;
+            border: 1px solid var(--border-color);
+            line-height: 1.6;
+            min-height: 60px;
+            overflow-x: auto;
+        }
+
+        .help-text {
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-primary));
+            color: var(--bg-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.4);
+            animation: slideInUp 0.3s ease-out;
+            z-index: 1000;
+            max-width: calc(100vw - 4rem);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-box {
+            background: rgba(0, 217, 255, 0.1);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .info-box.koro-info {
+            background: rgba(232, 67, 147, 0.1);
+            border-left-color: var(--accent-koro);
+        }
+
+        /* Koro Badge */
+        .koro-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, rgba(232,67,147,0.2), rgba(108,92,231,0.2));
+            border: 1px solid var(--accent-koro);
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-koro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: koroGlow 2s ease-in-out infinite alternate;
+        }
+        @keyframes koroGlow {
+            from { box-shadow: 0 0 6px rgba(232,67,147,0.3); }
+            to   { box-shadow: 0 0 16px rgba(232,67,147,0.6); }
+        }
+
+        /* Koro Divider */
+        .koro-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .koro-divider .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-koro), transparent);
+        }
+        .koro-divider .label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-koro);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Koro summary card at bottom of Koro tab */
+        .koro-summary-card {
+            background: linear-gradient(135deg, rgba(232,67,147,0.08), rgba(108,92,231,0.08));
+            border: 1px solid rgba(232,67,147,0.3);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        .koro-summary-card .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .koro-summary-card .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .koro-summary-card .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-koro);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .koro-summary-card .divider-v {
+            width: 1px;
+            height: 40px;
+            background: rgba(232,67,147,0.3);
+        }
+
+        /* Tablet and below */
+        @media (max-width: 1024px) {
+            header {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .logo-container {
+                order: -1;
+            }
+
+            .header-content {
+                width: 100%;
+            }
+
+            .developer-credit {
+                justify-self: center;
+                margin: 0 auto;
+            }
+
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 1rem;
+                gap: 0.75rem;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+                scroll-behavior: smooth;
+            }
+
+            .tabs::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .tabs::-webkit-scrollbar-track {
+                background: var(--bg-tertiary);
+                border-radius: 4px;
+            }
+
+            .tabs::-webkit-scrollbar-thumb {
+                background: var(--accent-primary);
+                border-radius: 4px;
+            }
+
+            .tabs::-webkit-scrollbar-thumb:hover {
+                background: var(--accent-secondary);
+            }
+
+            .tab {
+                flex-shrink: 0;
+                padding: 1rem 1.5rem;
+                font-size: 0.9rem;
+                min-width: fit-content;
+            }
+
+            .tab.active::before {
+                display: none;
+            }
+
+            .tab.active::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 70%;
+                height: 3px;
+                background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+                border-radius: 3px 3px 0 0;
+            }
+
+            .tab[data-tab="koro"].active::after {
+                background: linear-gradient(90deg, var(--accent-koro), var(--accent-secondary));
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .command-output {
+                padding: 1.5rem;
+                position: static;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 1.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+
+            .developer-credit {
+                font-size: 0.8rem;
+                padding: 0.6rem 1rem;
+                margin: 0 auto;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .tabs {
+                flex-direction: column;
+                overflow-x: visible;
+                overflow-y: visible;
+                padding: 0;
+                gap: 0;
+                max-height: 60px;
+                transition: max-height 0.4s ease;
+                border-radius: 12px;
+            }
+
+            .tabs.open {
+                max-height: 1000px;
+            }
+
+            .tab {
+                flex-shrink: 1;
+                padding: 1rem 1.25rem;
+                font-size: 0.9rem;
+                gap: 0.75rem;
+                min-width: 100%;
+                border-radius: 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .tab:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .tab:last-child {
+                border-radius: 0 0 12px 12px;
+                border-bottom: none;
+            }
+
+            .tabs:not(.open) .tab:not(.active) {
+                display: none;
+            }
+
+            .tabs:not(.open) .tab.active {
+                border-radius: 12px;
+                border-bottom: none;
+            }
+
+            .tab.active::after {
+                content: '';
+                position: absolute;
+                right: 1.25rem;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 20px;
+                height: 20px;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300d9ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='3' y1='6' x2='21' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='12' x2='21' y2='12'%3E%3C/line%3E%3Cline x1='3' y1='18' x2='21' y2='18'%3E%3C/line%3E%3C/svg%3E");
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                transition: all 0.3s ease;
+            }
+
+            .tab[data-tab="koro"].active::after {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e84393' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='3' y1='6' x2='21' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='12' x2='21' y2='12'%3E%3C/line%3E%3Cline x1='3' y1='18' x2='21' y2='18'%3E%3C/line%3E%3C/svg%3E");
+            }
+
+            .tabs.open .tab.active::after {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300d9ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+            }
+
+            .tabs.open .tab[data-tab="koro"].active::after {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e84393' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+            }
+
+            .tab.active::before {
+                display: none;
+            }
+
+            .tabs.open .tab.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 60%;
+                background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+                border-radius: 0 2px 2px 0;
+                display: block;
+            }
+
+            .tabs.open .tab[data-tab="koro"].active::before {
+                background: linear-gradient(180deg, var(--accent-koro), var(--accent-secondary));
+            }
+
+            .section {
+                padding: 1.25rem;
+                margin-bottom: 1rem;
+            }
+
+            .section-title {
+                margin-bottom: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            select,
+            textarea {
+                font-size: 16px;
+            }
+
+            .command-output {
+                padding: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .command-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .button-group {
+                width: 100%;
+            }
+
+            .copy-btn,
+            .clear-btn,
+            .example-btn {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .command-text {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .toast {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                max-width: none;
+                text-align: center;
+            }
+
+            .koro-summary-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .koro-summary-card .divider-v {
+                width: 100%;
+                height: 1px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.85rem;
+            }
+
+            .tabs {
+                padding: 0;
+                gap: 0;
+            }
+
+            .tab {
+                padding: 0.875rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            label {
+                font-size: 0.75rem;
+            }
+
+            .checkbox-item {
+                padding: 0.625rem;
+            }
+
+            .help-text {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="Logo/rabbiInfosec3.png" alt="this is my logo">
+                </div>
+            </div>
+            <div class="header-content">
+                <h1>Professional HTTPx Command Builder</h1>
+                <p class="subtitle">Fast and Multi-purpose HTTP Toolkit - All HTTPx Options Included</p>
+            </div>
+            <a href="https://github.com/rabby005" class="developer-credit">Developed by CSRR</a>
+        </header>
+
+        <div class="main-layout">
+            <aside class="sidebar">
+                <nav class="tabs">
+                    <button class="tab active" data-tab="input">🎯 Input</button>
+                    <button class="tab" data-tab="probes">🔬 Probes</button>
+                    <button class="tab" data-tab="matchers">✅ Matchers</button>
+                    <button class="tab" data-tab="filters">🔍 Filters</button>
+                    <button class="tab" data-tab="ratelimit">⏱️ Rate Limit</button>
+                    <button class="tab" data-tab="output">📄 Output</button>
+                    <button class="tab" data-tab="config">⚙️ Configuration</button>
+                    <button class="tab" data-tab="headless">🌐 Headless</button>
+                    <button class="tab" data-tab="misc">🔧 Miscellaneous</button>
+                    <button class="tab" data-tab="debug">🐛 Debug</button>
+                    <button class="tab" data-tab="optimization">🚀 Optimization</button>
+                    <button class="tab" data-tab="koro">🔥 Koro</button>
+                </nav>
+            </aside>
+
+            <main class="content-area">
+                <!-- ======== INPUT TAB ======== -->
+                <div id="input" class="tab-content active">
+                    <div class="section">
+                        <h2 class="section-title">Input Specification</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Target Host(s) (-u)</label>
+                                <textarea id="targets" placeholder="https://example.com&#10;http://test.com"></textarea>
+                                <span class="help-text">URLs to probe - one per line</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Target List File (-l)</label>
+                                <input type="text" id="targetList" placeholder="targets.txt">
+                                <span class="help-text">File containing list of hosts to process</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Raw Request File (-rr)</label>
+                                <input type="text" id="rawRequest" placeholder="request.txt">
+                                <span class="help-text">File containing raw HTTP request</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Input Mode (-im)</label>
+                                <select id="inputMode">
+                                    <option value="">None</option>
+                                    <option value="burp">Burp Suite</option>
+                                </select>
+                                <span class="help-text">Mode of input file</span>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong>Tip:</strong> Use -u for individual URLs or -l for a file with multiple hosts
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== PROBES TAB ======== -->
+                <div id="probes" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Probe Options</h2>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="statusCode">
+                                <label for="statusCode">Status Code (-sc)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="contentLength">
+                                <label for="contentLength">Content Length (-cl)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="contentType">
+                                <label for="contentType">Content Type (-ct)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="location">
+                                <label for="location">Redirect Location (-location)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="favicon">
+                                <label for="favicon">Favicon Hash (-favicon)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="jarm">
+                                <label for="jarm">JARM Fingerprint (-jarm)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="responseTime">
+                                <label for="responseTime">Response Time (-rt)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="lineCount">
+                                <label for="lineCount">Line Count (-lc)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="wordCount">
+                                <label for="wordCount">Word Count (-wc)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="title">
+                                <label for="title">Page Title (-title)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="webServer">
+                                <label for="webServer">Server Name (-server)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="techDetect">
+                                <label for="techDetect">Tech Detection (-td)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="method">
+                                <label for="method">HTTP Method (-method)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="websocket">
+                                <label for="websocket">WebSocket (-ws)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ip">
+                                <label for="ip">Host IP (-ip)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cname">
+                                <label for="cname">Host CNAME (-cname)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="asn">
+                                <label for="asn">ASN Information (-asn)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cdn">
+                                <label for="cdn">CDN/WAF Detection (-cdn)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="probe">
+                                <label for="probe">Probe Status (-probe)</label>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Body Preview Length (-bp)</label>
+                                <input type="number" id="bodyPreview" placeholder="100">
+                                <span class="help-text">First N characters of response body</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Hash Type (-hash)</label>
+                                <select id="hashType">
+                                    <option value="">None</option>
+                                    <option value="md5">MD5</option>
+                                    <option value="mmh3">MMH3</option>
+                                    <option value="simhash">SimHash</option>
+                                    <option value="sha1">SHA1</option>
+                                    <option value="sha256">SHA256</option>
+                                    <option value="sha512">SHA512</option>
+                                </select>
+                                <span class="help-text">Response body hash algorithm</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Fingerprint File (-cff)</label>
+                                <input type="text" id="customFingerprint" placeholder="fingerprints.json">
+                                <span class="help-text">Custom technology fingerprint file</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cpe">
+                                <label for="cpe">CPE Detection (-cpe)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="wordpress">
+                                <label for="wordpress">WordPress Detection (-wp)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="extractFqdn">
+                                <label for="extractFqdn">Extract FQDN (-efqdn)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== MATCHERS TAB ======== -->
+                <div id="matchers" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Matcher Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Match Status Code (-mc)</label>
+                                <input type="text" id="matchCode" placeholder="200,302">
+                                <span class="help-text">Comma-separated status codes</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match Content Length (-ml)</label>
+                                <input type="text" id="matchLength" placeholder="100,102">
+                                <span class="help-text">Comma-separated lengths</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match Line Count (-mlc)</label>
+                                <input type="text" id="matchLineCount" placeholder="423,532">
+                                <span class="help-text">Response body line count</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match Word Count (-mwc)</label>
+                                <input type="text" id="matchWordCount" placeholder="43,55">
+                                <span class="help-text">Response body word count</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match Favicon (-mfc)</label>
+                                <input type="text" id="matchFavicon" placeholder="1494302000">
+                                <span class="help-text">Favicon hash values</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match String (-ms)</label>
+                                <input type="text" id="matchString" placeholder="admin,login">
+                                <span class="help-text">Strings to match in response</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match Regex (-mr)</label>
+                                <input type="text" id="matchRegex" placeholder="admin.*panel">
+                                <span class="help-text">Regex pattern to match</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match CDN (-mcdn)</label>
+                                <input type="text" id="matchCdn" placeholder="cloudfront,fastly">
+                                <span class="help-text">CDN providers to match</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match Response Time (-mrt)</label>
+                                <input type="text" id="matchResponseTime" placeholder="&lt; 1">
+                                <span class="help-text">Response time condition (in seconds)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Match DSL Condition (-mdc)</label>
+                                <input type="text" id="matchCondition" placeholder="status_code==200">
+                                <span class="help-text">Custom DSL expression</span>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong>Note:</strong> Matchers help filter results based on specific criteria
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== FILTERS TAB ======== -->
+                <div id="filters" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Filter Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Filter Status Code (-fc)</label>
+                                <input type="text" id="filterCode" placeholder="403,401">
+                                <span class="help-text">Status codes to exclude</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Content Length (-fl)</label>
+                                <input type="text" id="filterLength" placeholder="23,33">
+                                <span class="help-text">Content lengths to exclude</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Line Count (-flc)</label>
+                                <input type="text" id="filterLineCount" placeholder="423,532">
+                                <span class="help-text">Line counts to exclude</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Word Count (-fwc)</label>
+                                <input type="text" id="filterWordCount" placeholder="423,532">
+                                <span class="help-text">Word counts to exclude</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Favicon (-ffc)</label>
+                                <input type="text" id="filterFavicon" placeholder="1494302000">
+                                <span class="help-text">Favicon hashes to exclude</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter String (-fs)</label>
+                                <input type="text" id="filterString" placeholder="admin">
+                                <span class="help-text">Strings to filter out</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Regex (-fe)</label>
+                                <input type="text" id="filterRegex" placeholder="admin.*">
+                                <span class="help-text">Regex pattern to filter</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter CDN (-fcdn)</label>
+                                <input type="text" id="filterCdn" placeholder="cloudfront">
+                                <span class="help-text">CDN providers to filter</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Response Time (-frt)</label>
+                                <input type="text" id="filterResponseTime" placeholder="&gt; 1">
+                                <span class="help-text">Response time condition</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter DSL Condition (-fdc)</label>
+                                <input type="text" id="filterCondition" placeholder="status_code!=200">
+                                <span class="help-text">Custom DSL expression</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Strip Tags (-strip)</label>
+                                <select id="strip">
+                                    <option value="">None</option>
+                                    <option value="html">HTML</option>
+                                    <option value="xml">XML</option>
+                                </select>
+                                <span class="help-text">Strip tags from response</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="filterErrorPage">
+                                <label for="filterErrorPage">ML Error Page Detection (-fep)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="filterDuplicates">
+                                <label for="filterDuplicates">Filter Duplicates (-fd)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== RATE LIMIT TAB ======== -->
+                <div id="ratelimit" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Rate Limit & Performance</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Threads (-t)</label>
+                                <input type="number" id="threads" placeholder="50">
+                                <span class="help-text">Number of concurrent threads (default: 50)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Rate Limit Per Second (-rl)</label>
+                                <input type="number" id="rateLimit" placeholder="150">
+                                <span class="help-text">Maximum requests per second (default: 150)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Rate Limit Per Minute (-rlm)</label>
+                                <input type="number" id="rateLimitMinute" placeholder="">
+                                <span class="help-text">Maximum requests per minute</span>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong>Tip:</strong> Adjust threads and rate limits based on target capacity
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== OUTPUT TAB ======== -->
+                <div id="output" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Output Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Output File (-o)</label>
+                                <input type="text" id="outputFile" placeholder="results.txt">
+                                <span class="help-text">File to write output results</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Output All Formats (-oa)</label>
+                                <input type="text" id="outputAll" placeholder="results">
+                                <span class="help-text">Filename for all output formats</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Store Response Directory (-srd)</label>
+                                <input type="text" id="storeResponseDir" placeholder="./responses/">
+                                <span class="help-text">Custom directory for responses</span>
+                            </div>
+                            <div class="form-group">
+                                <label>CSV Output Encoding (-csvo)</label>
+                                <input type="text" id="csvEncoding" placeholder="utf-8">
+                                <span class="help-text">Define CSV output encoding</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Protocol (-pr)</label>
+                                <select id="protocol">
+                                    <option value="">Auto</option>
+                                    <option value="http11">HTTP/1.1</option>
+                                    <option value="unknown">Unknown</option>
+                                </select>
+                                <span class="help-text">Protocol to use</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Filter Error Page Path (-fepp)</label>
+                                <input type="text" id="filterErrorPagePath" placeholder="filtered_error_page.json">
+                                <span class="help-text">Path for filtered error pages</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Exclude Output Fields (-eof)</label>
+                                <input type="text" id="excludeFields" placeholder="header,body">
+                                <span class="help-text">Fields to exclude from output</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="storeResponse">
+                                <label for="storeResponse">Store HTTP Response (-sr)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="omitBody">
+                                <label for="omitBody">Omit Response Body (-ob)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="csv">
+                                <label for="csv">CSV Format (-csv)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="json">
+                                <label for="json">JSON Format (-j)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="includeResponseHeader">
+                                <label for="includeResponseHeader">Include Response Header (-irh)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="includeResponse">
+                                <label for="includeResponse">Include Full Response (-irr)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="includeResponseBase64">
+                                <label for="includeResponseBase64">Include Base64 Response (-irrb)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="includeChain">
+                                <label for="includeChain">Include Redirect Chain (-include-chain)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="storeChain">
+                                <label for="storeChain">Store Redirect Chain (-store-chain)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="storeVisionRecon">
+                                <label for="storeVisionRecon">Store Vision Recon (-svrc)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="listOutputFields">
+                                <label for="listOutputFields">List Output Fields (-lof)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== CONFIGURATION TAB ======== -->
+                <div id="config" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Configuration</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Config File (-config)</label>
+                                <input type="text" id="configFile" placeholder="~/.config/httpx/config.yaml">
+                                <span class="help-text">Path to configuration file</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Resolvers (-r)</label>
+                                <input type="text" id="resolvers" placeholder="8.8.8.8,1.1.1.1">
+                                <span class="help-text">Custom DNS resolvers</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Allow List (-allow)</label>
+                                <input type="text" id="allow" placeholder="192.168.1.0/24">
+                                <span class="help-text">Allowed IP/CIDR ranges</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Deny List (-deny)</label>
+                                <input type="text" id="deny" placeholder="10.0.0.0/8">
+                                <span class="help-text">Denied IP/CIDR ranges</span>
+                            </div>
+                            <div class="form-group">
+                                <label>SNI Name (-sni)</label>
+                                <input type="text" id="sniName" placeholder="example.com">
+                                <span class="help-text">Custom TLS SNI name</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Headers (-H)</label>
+                                <textarea id="headers" placeholder="Authorization: Bearer token&#10;X-Custom: value"></textarea>
+                                <span class="help-text">Custom HTTP headers (one per line)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>HTTP Proxy (-proxy)</label>
+                                <input type="text" id="proxy" placeholder="http://127.0.0.1:8080">
+                                <span class="help-text">HTTP proxy to use</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Request Methods (-x)</label>
+                                <input type="text" id="methods" placeholder="GET,POST,PUT">
+                                <span class="help-text">HTTP methods to probe (use 'all' for all)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>POST Body (-body)</label>
+                                <textarea id="body" placeholder='{"key":"value"}'></textarea>
+                                <span class="help-text">POST body to include in request</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Max Redirects (-maxr)</label>
+                                <input type="number" id="maxRedirects" placeholder="10">
+                                <span class="help-text">Maximum redirects to follow (default: 10)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Secret File (-sf)</label>
+                                <input type="text" id="secretFile" placeholder="secrets.txt">
+                                <span class="help-text">Path to secret file for authentication</span>
+                            </div>
+                            <div class="form-group">
+                                <label>HTTP API Endpoint (-hae)</label>
+                                <input type="text" id="httpApiEndpoint" placeholder="http://localhost:8080">
+                                <span class="help-text">Experimental HTTP API endpoint</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="randomAgent">
+                                <label for="randomAgent">Random User-Agent (-random-agent)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="autoReferer">
+                                <label for="autoReferer">Auto Referer (-auto-referer)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="unsafe">
+                                <label for="unsafe">Unsafe Mode (-unsafe)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="resume">
+                                <label for="resume">Resume Scan (-resume)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="followRedirects">
+                                <label for="followRedirects">Follow Redirects (-fr)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="followHostRedirects">
+                                <label for="followHostRedirects">Follow Host Redirects (-fhr)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="respectHsts">
+                                <label for="respectHsts">Respect HSTS (-rhsts)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="vhostInput">
+                                <label for="vhostInput">VHost Input (-vhost-input)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="stream">
+                                <label for="stream">Stream Mode (-s)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="skipDedupe">
+                                <label for="skipDedupe">Skip Dedupe (-sd)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="leaveDefaultPorts">
+                                <label for="leaveDefaultPorts">Leave Default Ports (-ldp)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ztls">
+                                <label for="ztls">Use ZTLS (-ztls)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noDecode">
+                                <label for="noDecode">No Decode (-no-decode)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tlsImpersonate">
+                                <label for="tlsImpersonate">TLS Impersonate (-tlsi)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noStdin">
+                                <label for="noStdin">No Stdin (-no-stdin)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== HEADLESS TAB ======== -->
+                <div id="headless" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Headless Browser Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Headless Options (-ho)</label>
+                                <textarea id="headlessOptions" placeholder="--disable-gpu&#10;--no-sandbox"></textarea>
+                                <span class="help-text">Additional Chrome options (one per line)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Screenshot Timeout (-st)</label>
+                                <input type="number" id="screenshotTimeout" placeholder="10">
+                                <span class="help-text">Timeout in seconds (default: 10)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Screenshot Idle Time (-sid)</label>
+                                <input type="number" id="screenshotIdle" placeholder="1">
+                                <span class="help-text">Idle time before screenshot (default: 1s)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>JavaScript Code (-jsc)</label>
+                                <textarea id="javascriptCode" placeholder="console.log('test');"></textarea>
+                                <span class="help-text">Execute JS after navigation</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="screenshot">
+                                <label for="screenshot">Enable Screenshot (-ss)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="systemChrome">
+                                <label for="systemChrome">Use System Chrome (-system-chrome)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="excludeScreenshotBytes">
+                                <label for="excludeScreenshotBytes">Exclude Screenshot Bytes (-esb)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noScreenshotFullPage">
+                                <label for="noScreenshotFullPage">No Full Page Screenshot (-no-screenshot-full-page)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="excludeHeadlessBody">
+                                <label for="excludeHeadlessBody">Exclude Headless Body (-ehb)</label>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong>Note:</strong> Headless mode requires Chrome/Chromium to be installed
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== MISCELLANEOUS TAB ======== -->
+                <div id="misc" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Miscellaneous Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Ports (-p)</label>
+                                <input type="text" id="ports" placeholder="http:80,443,https:8443">
+                                <span class="help-text">Ports to probe (nmap syntax)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Path (-path)</label>
+                                <input type="text" id="path" placeholder="/admin,/login,/api">
+                                <span class="help-text">Paths to probe (comma-separated or file)</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="probeAllIps">
+                                <label for="probeAllIps">Probe All IPs (-pa)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tlsProbe">
+                                <label for="tlsProbe">TLS Probe (-tls-probe)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cspProbe">
+                                <label for="cspProbe">CSP Probe (-csp-probe)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tlsGrab">
+                                <label for="tlsGrab">TLS Grab (-tls-grab)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pipeline">
+                                <label for="pipeline">HTTP Pipeline (-pipeline)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="http2">
+                                <label for="http2">HTTP/2 Support (-http2)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="vhost">
+                                <label for="vhost">VHost Support (-vhost)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="listDslVariables">
+                                <label for="listDslVariables">List DSL Variables (-ldv)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Extractor Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Extract Regex (-er)</label>
+                                <input type="text" id="extractRegex" placeholder="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                <span class="help-text">Extract content with regex</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Extract Preset (-ep)</label>
+                                <input type="text" id="extractPreset" placeholder="url,ipv4,mail">
+                                <span class="help-text">Pre-defined extraction patterns</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Cloud Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Auth Config (-ac)</label>
+                                <input type="text" id="authConfig" placeholder="~/.pdcp/config.yaml">
+                                <span class="help-text">ProjectDiscovery Cloud auth config</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Team ID (-tid)</label>
+                                <input type="text" id="teamId" placeholder="">
+                                <span class="help-text">Upload to specific team</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Asset ID (-aid)</label>
+                                <input type="text" id="assetId" placeholder="">
+                                <span class="help-text">Upload to existing asset</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Asset Name (-aname)</label>
+                                <input type="text" id="assetName" placeholder="">
+                                <span class="help-text">Assets group name</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="auth">
+                                <label for="auth">Configure Auth (-auth)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dashboard">
+                                <label for="dashboard">Upload to Dashboard (-pd)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== DEBUG TAB ======== -->
+                <div id="debug" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Debug Options</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Profile Memory (-profile-mem)</label>
+                                <input type="text" id="profileMem" placeholder="mem.pprof">
+                                <span class="help-text">Memory profile dump file</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Stats Interval (-si)</label>
+                                <input type="number" id="statsInterval" placeholder="5">
+                                <span class="help-text">Seconds between stats updates (default: 5)</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="healthCheck">
+                                <label for="healthCheck">Health Check (-hc)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="debug">
+                                <label for="debug">Debug Mode (-debug)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="debugReq">
+                                <label for="debugReq">Debug Request (-debug-req)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="debugResp">
+                                <label for="debugResp">Debug Response (-debug-resp)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="version">
+                                <label for="version">Show Version (-version)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="stats">
+                                <label for="stats">Show Statistics (-stats)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="silent">
+                                <label for="silent">Silent Mode (-silent)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="verbose">
+                                <label for="verbose">Verbose Mode (-v)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noColor">
+                                <label for="noColor">No Color (-nc)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="trace">
+                                <label for="trace">Trace Mode (-tr)</label>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong>Tip:</strong> Use -silent for clean output, -v for detailed information
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== OPTIMIZATION TAB ======== -->
+                <div id="optimization" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">Optimization</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Max Host Error (-maxhr)</label>
+                                <input type="number" id="maxHostError" placeholder="30">
+                                <span class="help-text">Max errors before skipping host (default: 30)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Exclude Hosts (-e)</label>
+                                <input type="text" id="exclude" placeholder="cdn,private-ips">
+                                <span class="help-text">Exclude pattern (cdn, private-ips, cidr, ip, regex)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Retries (-retries)</label>
+                                <input type="number" id="retries" placeholder="0">
+                                <span class="help-text">Number of retries for failed requests</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Timeout (-timeout)</label>
+                                <input type="number" id="timeout" placeholder="10">
+                                <span class="help-text">Timeout in seconds (default: 10)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Delay (-delay)</label>
+                                <input type="text" id="delay" placeholder="200ms">
+                                <span class="help-text">Duration between requests (e.g., 200ms, 1s)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Response Size to Save (-rsts)</label>
+                                <input type="number" id="responseSizeToSave" placeholder="">
+                                <span class="help-text">Max response size to save in bytes</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Response Size to Read (-rstr)</label>
+                                <input type="number" id="responseSizeToRead" placeholder="">
+                                <span class="help-text">Max response size to read in bytes</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 1.5rem;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noFallback">
+                                <label for="noFallback">No Fallback (-nf)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noFallbackScheme">
+                                <label for="noFallbackScheme">No Fallback Scheme (-nfs)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="update">
+                                <label for="update">Update HTTPx (-up)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="disableUpdateCheck">
+                                <label for="disableUpdateCheck">Disable Update Check (-duc)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== 🔥 KORO TAB ======== -->
+                <div id="koro" class="tab-content">
+
+                    <!-- Quick-Fire Presets -->
+                    <div class="section koro-section">
+                        <h2 class="section-title">
+                            Quick-Fire Presets
+                            <span class="koro-badge">🔥 Koro</span>
+                        </h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.92rem;">
+                            One-click preset combos that load a full set of flags instantly. Pick a recon style and go.
+                        </p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem;">
+                            <button class="koro-preset-btn" data-preset="recon">🛡️ Full Recon</button>
+                            <button class="koro-preset-btn" data-preset="stealth">👻 Stealth Scan</button>
+                            <button class="koro-preset-btn" data-preset="fast">⚡ Fast Sweep</button>
+                            <button class="koro-preset-btn" data-preset="deep">🕳️ Deep Dive</button>
+                            <button class="koro-preset-btn" data-preset="screenshot">📸 Screenshot All</button>
+                            <button class="koro-preset-btn" data-preset="cdn">☁️ CDN Hunter</button>
+                        </div>
+                        <div class="info-box koro-info" style="margin-top: 1.25rem;">
+                            💡 <strong>How it works:</strong> Each preset fills the relevant fields across all tabs automatically. You can tweak anything after loading.
+                        </div>
+                    </div>
+
+                    <!-- Live Flag Inspector -->
+                    <div class="section koro-section">
+                        <h2 class="section-title">
+                            Live Flag Inspector
+                            <span class="koro-badge">🔥 Koro</span>
+                        </h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.92rem;">
+                            See exactly which flags are currently active in your command — live, in real time.
+                        </p>
+                        <div id="koroFlagList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 42px; align-items: center;">
+                            <span style="color: var(--text-muted); font-style: italic; font-size: 0.85rem;">No flags set yet — configure options in other tabs.</span>
+                        </div>
+                    </div>
+
+                    <!-- Saved Command Profiles -->
+                    <div class="section koro-section">
+                        <h2 class="section-title">
+                            Saved Profiles
+                            <span class="koro-badge">🔥 Koro</span>
+                        </h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.92rem;">
+                            Save your current command as a named profile and reload it any time.
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+                            <div class="form-group" style="flex: 1; min-width: 200px;">
+                                <label>Profile Name</label>
+                                <input type="text" id="koroProfileName" placeholder="my-recon-profile">
+                            </div>
+                            <button class="koro-action-btn save-btn" onclick="koroSaveProfile()">💾 Save</button>
+                        </div>
+                        <div id="koroProfileList" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.6rem;">
+                            <span style="color: var(--text-muted); font-style: italic; font-size: 0.85rem;">No saved profiles yet.</span>
+                        </div>
+                    </div>
+
+                    <!-- Command Stats Dashboard -->
+                    <div class="section koro-section">
+                        <h2 class="section-title">
+                            Command Stats
+                            <span class="koro-badge">🔥 Koro</span>
+                        </h2>
+                        <div class="koro-summary-card">
+                            <div class="stat">
+                                <span class="stat-label">Total Flags</span>
+                                <span class="stat-value" id="koroStatFlags">0</span>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="stat">
+                                <span class="stat-label">Cmd Length</span>
+                                <span class="stat-value" id="koroStatLength">5</span>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="stat">
+                                <span class="stat-label">Categories</span>
+                                <span class="stat-value" id="koroStatCategories">0</span>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="stat">
+                                <span class="stat-label">Has Target</span>
+                                <span class="stat-value" id="koroStatTarget">❌</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== GENERATED COMMAND OUTPUT ======== -->
+                <div class="command-output">
+                    <div class="command-header">
+                        <span class="command-title">🚀 Generated HTTPx Command</span>
+                        <div class="button-group">
+                            <button class="example-btn" onclick="loadExample()">📝 Example</button>
+                            <button class="clear-btn" onclick="clearAll()">🗑️ Clear</button>
+                            <button class="copy-btn" onclick="copyCommand()">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="command-text" id="commandOutput">httpx</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <style>
+        /* Koro Preset Buttons */
+        .koro-preset-btn {
+            padding: 0.85rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(232,67,147,0.3);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Spline Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+        .koro-preset-btn:hover {
+            background: rgba(232,67,147,0.12);
+            border-color: var(--accent-koro);
+            color: var(--accent-koro);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(232,67,147,0.25);
+        }
+        .koro-preset-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Koro Action Buttons */
+        .koro-action-btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Spline Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+        .koro-action-btn.save-btn {
+            background: linear-gradient(135deg, var(--accent-koro), #c0392b);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(232,67,147,0.3);
+        }
+        .koro-action-btn.save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(232,67,147,0.45);
+        }
+        .koro-action-btn.save-btn:active { transform: translateY(0); }
+
+        /* Koro Flag Pills */
+        .koro-flag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(232,67,147,0.1);
+            border: 1px solid rgba(232,67,147,0.35);
+            border-radius: 20px;
+            padding: 0.3rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--accent-koro);
+            font-weight: 500;
+            animation: pillPop 0.2s ease-out;
+        }
+        @keyframes pillPop {
+            from { transform: scale(0.7); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        /* Saved Profile Tags */
+        .koro-profile-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(232,67,147,0.08);
+            border: 1px solid rgba(232,67,147,0.25);
+            border-radius: 8px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .koro-profile-tag button {
+            background: none;
+            border: none;
+            color: var(--accent-koro);
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0;
+            line-height: 1;
+            transition: opacity 0.2s;
+        }
+        .koro-profile-tag button:hover { opacity: 0.6; }
+        .koro-profile-tag .load-btn {
+            color: var(--accent-tertiary);
+            margin-left: 0.25rem;
+        }
+    </style>
+
+    <script>
+    // ─────────────────────────────────────────────
+    //  TAB NAVIGATION
+    // ─────────────────────────────────────────────
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const tabsContainer = document.querySelector('.tabs');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.getAttribute('data-tab');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            tab.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+
+            if (window.innerWidth <= 768) {
+                tabsContainer.classList.toggle('open');
+            } else if (window.innerWidth <= 1024) {
+                tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && !tabsContainer.contains(e.target)) {
+            tabsContainer.classList.remove('open');
+        }
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 768) tabsContainer.classList.remove('open');
+        }, 250);
+    });
+
+    // ─────────────────────────────────────────────
+    //  COMMAND GENERATOR  (every original flag kept)
+    // ─────────────────────────────────────────────
+    function generateCommand() {
+        let command = 'httpx';
+
+        // ── INPUT ──
+        const targets = document.getElementById('targets').value.trim();
+        const targetList = document.getElementById('targetList').value.trim();
+        const rawRequest = document.getElementById('rawRequest').value.trim();
+        const inputMode = document.getElementById('inputMode').value;
+
+        if (targets) {
+            targets.split('\n').map(d => d.trim()).filter(d => d).forEach(t => { command += ` -u ${t}`; });
+        }
+        if (targetList) command += ` -l ${targetList}`;
+        if (rawRequest) command += ` -rr ${rawRequest}`;
+        if (inputMode) command += ` -im ${inputMode}`;
+
+        // ── PROBES ──
+        if (document.getElementById('statusCode').checked)    command += ' -sc';
+        if (document.getElementById('contentLength').checked) command += ' -cl';
+        if (document.getElementById('contentType').checked)   command += ' -ct';
+        if (document.getElementById('location').checked)      command += ' -location';
+        if (document.getElementById('favicon').checked)       command += ' -favicon';
+        if (document.getElementById('jarm').checked)          command += ' -jarm';
+        if (document.getElementById('responseTime').checked)  command += ' -rt';
+        if (document.getElementById('lineCount').checked)     command += ' -lc';
+        if (document.getElementById('wordCount').checked)     command += ' -wc';
+        if (document.getElementById('title').checked)         command += ' -title';
+        if (document.getElementById('webServer').checked)     command += ' -server';
+        if (document.getElementById('techDetect').checked)    command += ' -td';
+        if (document.getElementById('method').checked)        command += ' -method';
+        if (document.getElementById('websocket').checked)     command += ' -ws';
+        if (document.getElementById('ip').checked)            command += ' -ip';
+        if (document.getElementById('cname').checked)         command += ' -cname';
+        if (document.getElementById('asn').checked)           command += ' -asn';
+        if (document.getElementById('cdn').checked)           command += ' -cdn';
+        if (document.getElementById('probe').checked)         command += ' -probe';
+        if (document.getElementById('cpe').checked)           command += ' -cpe';
+        if (document.getElementById('wordpress').checked)     command += ' -wp';
+        if (document.getElementById('extractFqdn').checked)   command += ' -efqdn';
+
+        const bodyPreview = document.getElementById('bodyPreview').value.trim();
+        const hashType = document.getElementById('hashType').value;
+        const customFingerprint = document.getElementById('customFingerprint').value.trim();
+        if (bodyPreview)        command += ` -bp ${bodyPreview}`;
+        if (hashType)           command += ` -hash ${hashType}`;
+        if (customFingerprint)  command += ` -cff ${customFingerprint}`;
+
+        // ── MATCHERS ──
+        const matchCode         = document.getElementById('matchCode').value.trim();
+        const matchLength       = document.getElementById('matchLength').value.trim();
+        const matchLineCount    = document.getElementById('matchLineCount').value.trim();
+        const matchWordCount    = document.getElementById('matchWordCount').value.trim();
+        const matchFavicon      = document.getElementById('matchFavicon').value.trim();
+        const matchString       = document.getElementById('matchString').value.trim();
+        const matchRegex        = document.getElementById('matchRegex').value.trim();
+        const matchCdn          = document.getElementById('matchCdn').value.trim();
+        const matchResponseTime = document.getElementById('matchResponseTime').value.trim();
+        const matchCondition    = document.getElementById('matchCondition').value.trim();
+
+        if (matchCode)         command += ` -mc ${matchCode}`;
+        if (matchLength)       command += ` -ml ${matchLength}`;
+        if (matchLineCount)    command += ` -mlc ${matchLineCount}`;
+        if (matchWordCount)    command += ` -mwc ${matchWordCount}`;
+        if (matchFavicon)      command += ` -mfc ${matchFavicon}`;
+        if (matchString)       command += ` -ms ${matchString}`;
+        if (matchRegex)        command += ` -mr ${matchRegex}`;
+        if (matchCdn)          command += ` -mcdn ${matchCdn}`;
+        if (matchResponseTime) command += ` -mrt '${matchResponseTime}'`;
+        if (matchCondition)    command += ` -mdc ${matchCondition}`;
+
+        // ── FILTERS ──
+        const filterCode         = document.getElementById('filterCode').value.trim();
+        const filterLength       = document.getElementById('filterLength').value.trim();
+        const filterLineCount    = document.getElementById('filterLineCount').value.trim();
+        const filterWordCount    = document.getElementById('filterWordCount').value.trim();
+        const filterFavicon      = document.getElementById('filterFavicon').value.trim();
+        const filterString       = document.getElementById('filterString').value.trim();
+        const filterRegex        = document.getElementById('filterRegex').value.trim();
+        const filterCdn          = document.getElementById('filterCdn').value.trim();
+        const filterResponseTime = document.getElementById('filterResponseTime').value.trim();
+        const filterCondition    = document.getElementById('filterCondition').value.trim();
+        const strip              = document.getElementById('strip').value;
+
+        if (filterCode)         command += ` -fc ${filterCode}`;
+        if (filterLength)       command += ` -fl ${filterLength}`;
+        if (filterLineCount)    command += ` -flc ${filterLineCount}`;
+        if (filterWordCount)    command += ` -fwc ${filterWordCount}`;
+        if (filterFavicon)      command += ` -ffc ${filterFavicon}`;
+        if (filterString)       command += ` -fs ${filterString}`;
+        if (filterRegex)        command += ` -fe ${filterRegex}`;
+        if (filterCdn)          command += ` -fcdn ${filterCdn}`;
+        if (filterResponseTime) command += ` -frt '${filterResponseTime}'`;
+        if (filterCondition)    command += ` -fdc ${filterCondition}`;
+        if (strip)              command += ` -strip ${strip}`;
+        if (document.getElementById('filterErrorPage').checked)  command += ' -fep';
+        if (document.getElementById('filterDuplicates').checked) command += ' -fd';
+
+        // ── RATE LIMIT ──
+        const threads         = document.getElementById('threads').value.trim();
+        const rateLimit       = document.getElementById('rateLimit').value.trim();
+        const rateLimitMinute = document.getElementById('rateLimitMinute').value.trim();
+        if (threads)         command += ` -t ${threads}`;
+        if (rateLimit)       command += ` -rl ${rateLimit}`;
+        if (rateLimitMinute) command += ` -rlm ${rateLimitMinute}`;
+
+        // ── OUTPUT ──
+        const outputFile          = document.getElementById('outputFile').value.trim();
+        const outputAll           = document.getElementById('outputAll').value.trim();
+        const storeResponseDir    = document.getElementById('storeResponseDir').value.trim();
+        const csvEncoding         = document.getElementById('csvEncoding').value.trim();
+        const protocol            = document.getElementById('protocol').value;
+        const filterErrorPagePath = document.getElementById('filterErrorPagePath').value.trim();
+        const excludeFields       = document.getElementById('excludeFields').value.trim();
+
+        if (outputFile) command += ` -o ${outputFile}`;
+        if (outputAll)  command += ` -oa ${outputAll}`;
+        if (document.getElementById('storeResponse').checked)          command += ' -sr';
+        if (storeResponseDir)                                          command += ` -srd ${storeResponseDir}`;
+        if (document.getElementById('omitBody').checked)               command += ' -ob';
+        if (document.getElementById('csv').checked)                    command += ' -csv';
+        if (csvEncoding)                                               command += ` -csvo ${csvEncoding}`;
+        if (document.getElementById('json').checked)                   command += ' -j';
+        if (document.getElementById('includeResponseHeader').checked)  command += ' -irh';
+        if (document.getElementById('includeResponse').checked)        command += ' -irr';
+        if (document.getElementById('includeResponseBase64').checked)  command += ' -irrb';
+        if (document.getElementById('includeChain').checked)           command += ' -include-chain';
+        if (document.getElementById('storeChain').checked)             command += ' -store-chain';
+        if (document.getElementById('storeVisionRecon').checked)       command += ' -svrc';
+        if (protocol)                                                  command += ` -pr ${protocol}`;
+        if (filterErrorPagePath)                                       command += ` -fepp ${filterErrorPagePath}`;
+        if (document.getElementById('listOutputFields').checked)       command += ' -lof';
+        if (excludeFields)                                             command += ` -eof ${excludeFields}`;
+
+        // ── CONFIGURATION ──
+        const configFile      = document.getElementById('configFile').value.trim();
+        const resolvers       = document.getElementById('resolvers').value.trim();
+        const allow           = document.getElementById('allow').value.trim();
+        const deny            = document.getElementById('deny').value.trim();
+        const sniName         = document.getElementById('sniName').value.trim();
+        const headers         = document.getElementById('headers').value.trim();
+        const proxy           = document.getElementById('proxy').value.trim();
+        const methods         = document.getElementById('methods').value.trim();
+        const body            = document.getElementById('body').value.trim();
+        const maxRedirects    = document.getElementById('maxRedirects').value.trim();
+        const secretFile      = document.getElementById('secretFile').value.trim();
+        const httpApiEndpoint = document.getElementById('httpApiEndpoint').value.trim();
+
+        if (configFile) command += ` -config ${configFile}`;
+        if (resolvers)  command += ` -r ${resolvers}`;
+        if (allow)      command += ` -allow ${allow}`;
+        if (deny)       command += ` -deny ${deny}`;
+        if (sniName)    command += ` -sni ${sniName}`;
+        if (document.getElementById('randomAgent').checked)       command += ' -random-agent';
+        if (document.getElementById('autoReferer').checked)       command += ' -auto-referer';
+        if (headers) {
+            headers.split('\n').map(h => h.trim()).filter(h => h).forEach(h => { command += ` -H "${h}"`; });
+        }
+        if (proxy) command += ` -proxy ${proxy}`;
+        if (document.getElementById('unsafe').checked)            command += ' -unsafe';
+        if (document.getElementById('resume').checked)            command += ' -resume';
+        if (document.getElementById('followRedirects').checked)   command += ' -fr';
+        if (maxRedirects)                                         command += ` -maxr ${maxRedirects}`;
+        if (document.getElementById('followHostRedirects').checked) command += ' -fhr';
+        if (document.getElementById('respectHsts').checked)       command += ' -rhsts';
+        if (document.getElementById('vhostInput').checked)        command += ' -vhost-input';
+        if (methods)                                              command += ` -x ${methods}`;
+        if (body)                                                 command += ` -body '${body}'`;
+        if (document.getElementById('stream').checked)            command += ' -s';
+        if (document.getElementById('skipDedupe').checked)        command += ' -sd';
+        if (document.getElementById('leaveDefaultPorts').checked) command += ' -ldp';
+        if (document.getElementById('ztls').checked)              command += ' -ztls';
+        if (document.getElementById('noDecode').checked)          command += ' -no-decode';
+        if (document.getElementById('tlsImpersonate').checked)    command += ' -tlsi';
+        if (document.getElementById('noStdin').checked)           command += ' -no-stdin';
+        if (secretFile)                                           command += ` -sf ${secretFile}`;
+        if (httpApiEndpoint)                                      command += ` -hae ${httpApiEndpoint}`;
+
+        // ── HEADLESS ──
+        const headlessOptions  = document.getElementById('headlessOptions').value.trim();
+        const screenshotTimeout = document.getElementById('screenshotTimeout').value.trim();
+        const screenshotIdle   = document.getElementById('screenshotIdle').value.trim();
+        const javascriptCode   = document.getElementById('javascriptCode').value.trim();
+
+        if (document.getElementById('screenshot').checked)              command += ' -ss';
+        if (document.getElementById('systemChrome').checked)           command += ' -system-chrome';
+        if (headlessOptions) {
+            headlessOptions.split('\n').map(o => o.trim()).filter(o => o).forEach(o => { command += ` -ho "${o}"`; });
+        }
+        if (document.getElementById('excludeScreenshotBytes').checked)   command += ' -esb';
+        if (document.getElementById('noScreenshotFullPage').checked)     command += ' -no-screenshot-full-page';
+        if (document.getElementById('excludeHeadlessBody').checked)      command += ' -ehb';
+        if (screenshotTimeout)                                           command += ` -st ${screenshotTimeout}`;
+        if (screenshotIdle)                                              command += ` -sid ${screenshotIdle}`;
+        if (javascriptCode)                                              command += ` -jsc "${javascriptCode}"`;
+
+        // ── MISCELLANEOUS ──
+        const ports        = document.getElementById('ports').value.trim();
+        const path         = document.getElementById('path').value.trim();
+        const extractRegex = document.getElementById('extractRegex').value.trim();
+        const extractPreset= document.getElementById('extractPreset').value.trim();
+
+        if (document.getElementById('probeAllIps').checked)      command += ' -pa';
+        if (ports)                                               command += ` -p ${ports}`;
+        if (path)                                                command += ` -path ${path}`;
+        if (document.getElementById('tlsProbe').checked)         command += ' -tls-probe';
+        if (document.getElementById('cspProbe').checked)         command += ' -csp-probe';
+        if (document.getElementById('tlsGrab').checked)          command += ' -tls-grab';
+        if (document.getElementById('pipeline').checked)         command += ' -pipeline';
+        if (document.getElementById('http2').checked)            command += ' -http2';
+        if (document.getElementById('vhost').checked)            command += ' -vhost';
+        if (document.getElementById('listDslVariables').checked) command += ' -ldv';
+        if (extractRegex)                                        command += ` -er "${extractRegex}"`;
+        if (extractPreset)                                       command += ` -ep ${extractPreset}`;
+
+        // ── CLOUD ──
+        const authConfig = document.getElementById('authConfig').value.trim();
+        const teamId     = document.getElementById('teamId').value.trim();
+        const assetId    = document.getElementById('assetId').value.trim();
+        const assetName  = document.getElementById('assetName').value.trim();
+
+        if (document.getElementById('auth').checked)      command += ' -auth';
+        if (authConfig)                                   command += ` -ac ${authConfig}`;
+        if (document.getElementById('dashboard').checked) command += ' -pd';
+        if (teamId)                                       command += ` -tid ${teamId}`;
+        if (assetId)                                      command += ` -aid ${assetId}`;
+        if (assetName)                                    command += ` -aname ${assetName}`;
+
+        // ── DEBUG ──
+        const profileMem   = document.getElementById('profileMem').value.trim();
+        const statsInterval = document.getElementById('statsInterval').value.trim();
+
+        if (document.getElementById('healthCheck').checked)  command += ' -hc';
+        if (document.getElementById('debug').checked)        command += ' -debug';
+        if (document.getElementById('debugReq').checked)     command += ' -debug-req';
+        if (document.getElementById('debugResp').checked)    command += ' -debug-resp';
+        if (document.getElementById('version').checked)      command += ' -version';
+        if (document.getElementById('stats').checked)        command += ' -stats';
+        if (profileMem)                                      command += ` -profile-mem ${profileMem}`;
+        if (document.getElementById('silent').checked)       command += ' -silent';
+        if (document.getElementById('verbose').checked)      command += ' -v';
+        if (statsInterval)                                   command += ` -si ${statsInterval}`;
+        if (document.getElementById('noColor').checked)      command += ' -nc';
+        if (document.getElementById('trace').checked)        command += ' -tr';
+
+        // ── OPTIMIZATION ──
+        const maxHostError       = document.getElementById('maxHostError').value.trim();
+        const exclude            = document.getElementById('exclude').value.trim();
+        const retries            = document.getElementById('retries').value.trim();
+        const timeout            = document.getElementById('timeout').value.trim();
+        const delay              = document.getElementById('delay').value.trim();
+        const responseSizeToSave = document.getElementById('responseSizeToSave').value.trim();
+        const responseSizeToRead = document.getElementById('responseSizeToRead').value.trim();
+
+        if (document.getElementById('noFallback').checked)       command += ' -nf';
+        if (document.getElementById('noFallbackScheme').checked) command += ' -nfs';
+        if (maxHostError)                                        command += ` -maxhr ${maxHostError}`;
+        if (exclude)                                             command += ` -e ${exclude}`;
+        if (retries)                                             command += ` -retries ${retries}`;
+        if (timeout)                                             command += ` -timeout ${timeout}`;
+        if (delay)                                               command += ` -delay ${delay}`;
+        if (responseSizeToSave)                                  command += ` -rsts ${responseSizeToSave}`;
+        if (responseSizeToRead)                                  command += ` -rstr ${responseSizeToRead}`;
+        if (document.getElementById('update').checked)           command += ' -up';
+        if (document.getElementById('disableUpdateCheck').checked) command += ' -duc';
+
+        // ── WRITE OUTPUT ──
+        document.getElementById('commandOutput').textContent = command;
+
+        // ── KORO: update live inspector & stats ──
+        koroUpdateInspector(command);
+        koroUpdateStats(command);
+    }
+
+    // ─────────────────────────────────────────────
+    //  UTILITY BUTTONS
+    // ─────────────────────────────────────────────
+    function copyCommand() {
+        navigator.clipboard.writeText(document.getElementById('commandOutput').textContent).then(() => {
+            showToast('✅ Command copied to clipboard!');
+        });
+    }
+
+    function clearAll() {
+        document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(el => el.value = '');
+        document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+        document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+        generateCommand();
+        showToast('🗑️ All fields cleared!');
+    }
+
+    function loadExample() {
+        clearAll();
+        document.getElementById('targets').value = 'https://example.com';
+        document.getElementById('statusCode').checked = true;
+        document.getElementById('title').checked = true;
+        document.getElementById('techDetect').checked = true;
+        document.getElementById('verbose').checked = true;
+        document.getElementById('outputFile').value = 'results.txt';
+        generateCommand();
+        showToast('📝 Example loaded!');
+    }
+
+    function showToast(message) {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'slideInUp 0.3s ease-out reverse';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+
+    // ─────────────────────────────────────────────
+    //  LISTEN — every input triggers rebuild
+    // ─────────────────────────────────────────────
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('input',  generateCommand);
+        el.addEventListener('change', generateCommand);
+    });
+
+    // ─────────────────────────────────────────────
+    //  🔥 KORO — LIVE FLAG INSPECTOR
+    // ─────────────────────────────────────────────
+    function koroUpdateInspector(cmd) {
+        const container = document.getElementById('koroFlagList');
+        // extract every flag token that starts with a dash
+        const tokens = cmd.match(/-[\w-]+/g) || [];
+        // dedupe
+        const unique = [...new Set(tokens)];
+        if (unique.length === 0) {
+            container.innerHTML = '<span style="color: var(--text-muted); font-style: italic; font-size: 0.85rem;">No flags set yet — configure options in other tabs.</span>';
+            return;
+        }
+        container.innerHTML = unique.map(f =>
+            `<span class="koro-flag-pill">${f}</span>`
+        ).join('');
+    }
+
+    // ─────────────────────────────────────────────
+    //  🔥 KORO — COMMAND STATS
+    // ─────────────────────────────────────────────
+    function koroUpdateStats(cmd) {
+        const flags = cmd.match(/-[\w-]+/g) || [];
+        const unique = [...new Set(flags)];
+        document.getElementById('koroStatFlags').textContent  = unique.length;
+        document.getElementById('koroStatLength').textContent = cmd.length;
+
+        // count categories by presence of known flag groups
+        let cats = 0;
+        const hasTarget  = cmd.includes('-u ') || cmd.includes('-l ');
+        const hasProbe   = /\s-(sc|cl|ct|location|favicon|jarm|rt|lc|wc|title|server|td|method|ws|ip|cname|asn|cdn|probe|cpe|wp|efqdn|bp|hash|cff)\b/.test(cmd);
+        const hasMatcher = /\s-m(c|l|lc|wc|fc|s|r|cdn|rt|dc)\b/.test(cmd);
+        const hasFilter  = /\s-f(c|l|lc|wc|fc|s|e|cdn|rt|dc|ep|d)\b/.test(cmd) || cmd.includes('-strip');
+        const hasRate    = /\s-(t|rl|rlm)\b/.test(cmd);
+        const hasOutput  = /\s-(o|oa|sr|srd|ob|csv|j|irh|irr|irrb|include-chain|store-chain|svrc|pr|fepp|lof|eof|csvo)\b/.test(cmd);
+        const hasConfig  = /\s-(config|r|allow|deny|sni|random-agent|auto-referer|H|proxy|unsafe|resume|fr|maxr|fhr|rhsts|vhost-input|x|body|s|sd|ldp|ztls|no-decode|tlsi|no-stdin|sf|hae)\b/.test(cmd);
+        const hasHeadless= /\s-(ss|system-chrome|ho|esb|no-screenshot-full-page|ehb|st|sid|jsc)\b/.test(cmd);
+        const hasMisc    = /\s-(pa|p|path|tls-probe|csp-probe|tls-grab|pipeline|http2|vhost|ldv|er|ep)\b/.test(cmd);
+        const hasDebug   = /\s-(hc|debug|debug-req|debug-resp|version|stats|profile-mem|silent|v|si|nc|tr)\b/.test(cmd);
+        const hasOptim   = /\s-(nf|nfs|maxhr|e|retries|timeout|delay|rsts|rstr|up|duc)\b/.test(cmd);
+        const hasCloud   = /\s-(auth|ac|pd|tid|aid|aname)\b/.test(cmd);
+
+        [hasTarget, hasProbe, hasMatcher, hasFilter, hasRate, hasOutput,
+         hasConfig, hasHeadless, hasMisc, hasDebug, hasOptim, hasCloud]
+            .forEach(v => { if (v) cats++; });
+
+        document.getElementById('koroStatCategories').textContent = cats;
+        document.getElementById('koroStatTarget').textContent     = hasTarget ? '✅' : '❌';
+    }
+
+    // ─────────────────────────────────────────────
+    //  🔥 KORO — PRESETS
+    // ─────────────────────────────────────────────
+    const PRESETS = {
+        recon: {
+            label: '🛡️ Full Recon',
+            set: () => {
+                document.getElementById('targets').value = 'https://example.com';
+                ['statusCode','contentLength','contentType','title','webServer','techDetect',
+                 'ip','cname','asn','cdn','favicon','jarm','responseTime','probe'].forEach(id => {
+                    document.getElementById(id).checked = true;
+                });
+                document.getElementById('outputFile').value = 'recon_results.txt';
+                document.getElementById('json').checked = true;
+                document.getElementById('verbose').checked = true;
+            }
+        },
+        stealth: {
+            label: '👻 Stealth',
+            set: () => {
+                document.getElementById('targets').value = 'https://example.com';
+                document.getElementById('randomAgent').checked   = true;
+                document.getElementById('followRedirects').checked = true;
+                document.getElementById('statusCode').checked    = true;
+                document.getElementById('title').checked         = true;
+                document.getElementById('silent').checked        = true;
+                document.getElementById('threads').value         = '10';
+                document.getElementById('rateLimit').value       = '20';
+                document.getElementById('delay').value           = '500ms';
+                document.getElementById('timeout').value         = '15';
+            }
+        },
+        fast: {
+            label: '⚡ Fast Sweep',
+            set: () => {
+                document.getElementById('targetList').value      = 'targets.txt';
+                document.getElementById('statusCode').checked    = true;
+                document.getElementById('title').checked         = true;
+                document.getElementById('contentLength').checked = true;
+                document.getElementById('threads').value         = '200';
+                document.getElementById('rateLimit').value       = '500';
+                document.getElementById('timeout').value         = '5';
+                document.getElementById('outputFile').value      = 'fast_results.txt';
+                document.getElementById('silent').checked        = true;
+                document.getElementById('filterCode').value      = '404,000';
+            }
+        },
+        deep: {
+            label: '🕳️ Deep Dive',
+            set: () => {
+                document.getElementById('targets').value = 'https://example.com';
+                ['statusCode','contentLength','contentType','title','webServer','techDetect',
+                 'ip','cname','asn','cdn','favicon','jarm','responseTime','lineCount','wordCount',
+                 'probe','cpe','wordpress','method','websocket'].forEach(id => {
+                    document.getElementById(id).checked = true;
+                });
+                document.getElementById('hashType').value        = 'sha256';
+                document.getElementById('json').checked          = true;
+                document.getElementById('includeResponse').checked = true;
+                document.getElementById('storeResponse').checked = true;
+                document.getElementById('followRedirects').checked = true;
+                document.getElementById('tlsGrab').checked       = true;
+                document.getElementById('outputFile').value      = 'deep_results.jsonl';
+                document.getElementById('verbose').checked       = true;
+            }
+        },
+        screenshot: {
+            label: '📸 Screenshot All',
+            set: () => {
+                document.getElementById('targetList').value       = 'targets.txt';
+                document.getElementById('screenshot').checked     = true;
+                document.getElementById('statusCode').checked     = true;
+                document.getElementById('title').checked          = true;
+                document.getElementById('techDetect').checked     = true;
+                document.getElementById('screenshotTimeout').value= '15';
+                document.getElementById('screenshotIdle').value   = '2';
+                document.getElementById('storeResponse').checked  = true;
+                document.getElementById('json').checked           = true;
+                document.getElementById('outputFile').value       = 'screenshots.jsonl';
+            }
+        },
+        cdn: {
+            label: '☁️ CDN Hunter',
+            set: () => {
+                document.getElementById('targetList').value  = 'targets.txt';
+                document.getElementById('cdn').checked       = true;
+                document.getElementById('statusCode').checked= true;
+                document.getElementById('ip').checked        = true;
+                document.getElementById('cname').checked     = true;
+                document.getElementById('asn').checked       = true;
+                document.getElementById('title').checked     = true;
+                document.getElementById('matchCdn').value    = 'cloudfront,fastly,google,akamai';
+                document.getElementById('json').checked      = true;
+                document.getElementById('outputFile').value  = 'cdn_results.jsonl';
+            }
+        }
+    };
+
+    document.querySelectorAll('.koro-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-preset');
+            if (PRESETS[key]) {
+                clearAll();
+                PRESETS[key].set();
+                generateCommand();
+                showToast(`🔥 Preset "${PRESETS[key].label}" loaded!`);
+            }
+        });
+    });
+
+    // ─────────────────────────────────────────────
+    //  🔥 KORO — SAVED PROFILES (in-memory)
+    // ─────────────────────────────────────────────
+    let savedProfiles = {};  // { name: commandString }
+
+    function koroSaveProfile() {
+        const name = document.getElementById('koroProfileName').value.trim();
+        if (!name) { showToast('⚠️ Enter a profile name first.'); return; }
+        const cmd  = document.getElementById('commandOutput').textContent;
+        if (cmd === 'httpx') { showToast('⚠️ Nothing to save — configure some flags first.'); return; }
+        savedProfiles[name] = cmd;
+        document.getElementById('koroProfileName').value = '';
+        renderProfiles();
+        showToast(`💾 Profile "${name}" saved!`);
+    }
+
+    function koroLoadProfile(name) {
+        const cmd = savedProfiles[name];
+        if (!cmd) return;
+        // paste into command output directly and show
+        document.getElementById('commandOutput').textContent = cmd;
+        showToast(`📂 Profile "${name}" loaded into command bar. Copy it!`);
+    }
+
+    function koroDeleteProfile(name) {
+        delete savedProfiles[name];
+        renderProfiles();
+        showToast(`🗑️ Profile "${name}" deleted.`);
+    }
+
+    function renderProfiles() {
+        const container = document.getElementById('koroProfileList');
+        const keys = Object.keys(savedProfiles);
+        if (keys.length === 0) {
+            container.innerHTML = '<span style="color: var(--text-muted); font-style: italic; font-size: 0.85rem;">No saved profiles yet.</span>';
+            return;
+        }
+        container.innerHTML = keys.map(name =>
+            `<div class="koro-profile-tag">
+                <span>${name}</span>
+                <button class="load-btn" onclick="koroLoadProfile('${name}')">📂</button>
+                <button onclick="koroDeleteProfile('${name}')">✕</button>
+            </div>`
+        ).join('');
+    }
+
+    // ─────────────────────────────────────────────
+    //  INIT
+    // ─────────────────────────────────────────────
+    generateCommand();
+    </script>
+</body>
+</html>
