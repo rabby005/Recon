@@ -953,7 +953,7 @@
                 <h1>Professional HTTPx Command Builder</h1>
                 <p class="subtitle">Fast and Multi-purpose HTTP Toolkit - All HTTPx Options Included</p>
             </div>
-            <a href="https://github.com/rabby005" class="developer-credit">Developed by CSRRabbi</a>
+            <a href="https://github.com/rabby005" class="developer-credit">Developed by CSRR</a>
         </header>
 
         <div class="main-layout">
@@ -1814,6 +1814,29 @@
                 <!-- ======== 🔥 KORO TAB ======== -->
                 <div id="koro" class="tab-content">
 
+
+                    <!-- Direct Command Input -->
+                    <div class="section koro-section">
+                        <h2 class="section-title">
+                            Direct Command Input
+                            <span class="koro-badge">🔥 Koro</span>
+                        </h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.92rem;">
+                            Paste any <code style="background:rgba(232,67,147,0.12);color:var(--accent-koro);padding:0.15rem 0.5rem;border-radius:4px;font-family:'JetBrains Mono',monospace;">httpx</code> command here and hit <strong style="color:var(--accent-koro);">Load</strong> — every flag it recognises will fill the matching fields across all tabs instantly.
+                        </p>
+                        <div class="form-group">
+                            <label>Raw HTTPx Command</label>
+                            <textarea id="koroRawInput" placeholder="httpx -u https://example.com -sc -title -td -o results.txt -j -v" style="min-height:80px;"></textarea>
+                        </div>
+                        <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap;">
+                            <button class="koro-action-btn load-raw-btn" onclick="koroLoadRaw()">📥 Load into Fields</button>
+                            <button class="koro-action-btn paste-btn"  onclick="koroFromClipboard()">📋 Paste from Clipboard</button>
+                        </div>
+                        <div class="info-box koro-info" style="margin-top:1rem;">
+                            💡 <strong>Supports:</strong> boolean flags, single &amp; multi-value flags (-u, -H, -ho), quoted values, and piped input.
+                        </div>
+                    </div>
+
                     <!-- Quick-Fire Presets -->
                     <div class="section koro-section">
                         <h2 class="section-title">
@@ -1955,6 +1978,30 @@
             transition: all 0.25s ease;
             white-space: nowrap;
         }
+
+        /* Koro Direct-Input buttons */
+        .koro-action-btn.load-raw-btn {
+            background: linear-gradient(135deg, var(--accent-koro), #a855a0);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(232,67,147,0.3);
+        }
+        .koro-action-btn.load-raw-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(232,67,147,0.45);
+        }
+        .koro-action-btn.load-raw-btn:active { transform: translateY(0); }
+
+        .koro-action-btn.paste-btn {
+            background: linear-gradient(135deg, var(--accent-secondary), #5a4bd1);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(108,92,231,0.3);
+        }
+        .koro-action-btn.paste-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(108,92,231,0.45);
+        }
+        .koro-action-btn.paste-btn:active { transform: translateY(0); }
+
         .koro-action-btn.save-btn {
             background: linear-gradient(135deg, var(--accent-koro), #c0392b);
             color: #fff;
@@ -2587,6 +2634,422 @@
             </div>`
         ).join('');
     }
+
+
+    // ─────────────────────────────────────────────
+    //  🔥 KORO — DIRECT COMMAND PARSER & LOADER
+    // ─────────────────────────────────────────────
+
+    /*
+     * tokenise a raw command string into an array of tokens,
+     * respecting single-quoted and double-quoted strings.
+     */
+    function tokenise(raw) {
+        const tokens = [];
+        let current = '';
+        let inQuote = null;          // null | "'" | '"'
+        for (let i = 0; i < raw.length; i++) {
+            const ch = raw[i];
+            if (inQuote) {
+                if (ch === inQuote) { inQuote = null; }
+                else                { current += ch; }
+            } else if (ch === "'" || ch === '"') {
+                inQuote = ch;
+            } else if (ch === ' ' || ch === '\t') {
+                if (current.length) { tokens.push(current); current = ''; }
+            } else {
+                current += ch;
+            }
+        }
+        if (current.length) tokens.push(current);
+        return tokens;
+    }
+
+    /*
+     * Master map:  flag  →  { type, id }
+     *   type  = 'check'   → tick a checkbox
+     *           'text'    → fill a text / number input
+     *           'select'  → set a <select> value
+     *           'multi'   → push value onto a textarea (one per line)
+     *           'multiH'  → push value onto the headers textarea
+     */
+    const FLAG_MAP = {
+        // ── INPUT ──
+        '-u':            { type:'multi',  id:'targets' },
+        '-target':       { type:'multi',  id:'targets' },
+        '-l':            { type:'text',   id:'targetList' },
+        '-list':         { type:'text',   id:'targetList' },
+        '-rr':           { type:'text',   id:'rawRequest' },
+        '-request':      { type:'text',   id:'rawRequest' },
+        '-im':           { type:'select', id:'inputMode' },
+        '-input-mode':   { type:'select', id:'inputMode' },
+
+        // ── PROBES ──
+        '-sc':           { type:'check',  id:'statusCode' },
+        '-status-code':  { type:'check',  id:'statusCode' },
+        '-cl':           { type:'check',  id:'contentLength' },
+        '-content-length':{ type:'check', id:'contentLength' },
+        '-ct':           { type:'check',  id:'contentType' },
+        '-content-type': { type:'check',  id:'contentType' },
+        '-location':     { type:'check',  id:'location' },
+        '-favicon':      { type:'check',  id:'favicon' },
+        '-jarm':         { type:'check',  id:'jarm' },
+        '-rt':           { type:'check',  id:'responseTime' },
+        '-response-time':{ type:'check',  id:'responseTime' },
+        '-lc':           { type:'check',  id:'lineCount' },
+        '-line-count':   { type:'check',  id:'lineCount' },
+        '-wc':           { type:'check',  id:'wordCount' },
+        '-word-count':   { type:'check',  id:'wordCount' },
+        '-title':        { type:'check',  id:'title' },
+        '-server':       { type:'check',  id:'webServer' },
+        '-web-server':   { type:'check',  id:'webServer' },
+        '-td':           { type:'check',  id:'techDetect' },
+        '-tech-detect':  { type:'check',  id:'techDetect' },
+        '-method':       { type:'check',  id:'method' },
+        '-ws':           { type:'check',  id:'websocket' },
+        '-websocket':    { type:'check',  id:'websocket' },
+        '-ip':           { type:'check',  id:'ip' },
+        '-cname':        { type:'check',  id:'cname' },
+        '-asn':          { type:'check',  id:'asn' },
+        '-cdn':          { type:'check',  id:'cdn' },
+        '-probe':        { type:'check',  id:'probe' },
+        '-cpe':          { type:'check',  id:'cpe' },
+        '-wp':           { type:'check',  id:'wordpress' },
+        '-wordpress':    { type:'check',  id:'wordpress' },
+        '-efqdn':        { type:'check',  id:'extractFqdn' },
+        '-extract-fqdn': { type:'check',  id:'extractFqdn' },
+        '-bp':           { type:'text',   id:'bodyPreview' },
+        '-body-preview': { type:'text',   id:'bodyPreview' },
+        '-hash':         { type:'select', id:'hashType' },
+        '-cff':          { type:'text',   id:'customFingerprint' },
+        '-custom-fingerprint-file':{ type:'text', id:'customFingerprint' },
+
+        // ── MATCHERS ──
+        '-mc':           { type:'text',   id:'matchCode' },
+        '-match-code':   { type:'text',   id:'matchCode' },
+        '-ml':           { type:'text',   id:'matchLength' },
+        '-match-length': { type:'text',   id:'matchLength' },
+        '-mlc':          { type:'text',   id:'matchLineCount' },
+        '-match-line-count':{ type:'text', id:'matchLineCount' },
+        '-mwc':          { type:'text',   id:'matchWordCount' },
+        '-match-word-count':{ type:'text', id:'matchWordCount' },
+        '-mfc':          { type:'text',   id:'matchFavicon' },
+        '-match-favicon':{ type:'text',   id:'matchFavicon' },
+        '-ms':           { type:'text',   id:'matchString' },
+        '-match-string': { type:'text',   id:'matchString' },
+        '-mr':           { type:'text',   id:'matchRegex' },
+        '-match-regex':  { type:'text',   id:'matchRegex' },
+        '-mcdn':         { type:'text',   id:'matchCdn' },
+        '-match-cdn':    { type:'text',   id:'matchCdn' },
+        '-mrt':          { type:'text',   id:'matchResponseTime' },
+        '-match-response-time':{ type:'text', id:'matchResponseTime' },
+        '-mdc':          { type:'text',   id:'matchCondition' },
+        '-match-condition':{ type:'text', id:'matchCondition' },
+
+        // ── FILTERS ──
+        '-fc':           { type:'text',   id:'filterCode' },
+        '-filter-code':  { type:'text',   id:'filterCode' },
+        '-fl':           { type:'text',   id:'filterLength' },
+        '-filter-length':{ type:'text',   id:'filterLength' },
+        '-flc':          { type:'text',   id:'filterLineCount' },
+        '-filter-line-count':{ type:'text', id:'filterLineCount' },
+        '-fwc':          { type:'text',   id:'filterWordCount' },
+        '-filter-word-count':{ type:'text', id:'filterWordCount' },
+        '-ffc':          { type:'text',   id:'filterFavicon' },
+        '-filter-favicon':{ type:'text',  id:'filterFavicon' },
+        '-fs':           { type:'text',   id:'filterString' },
+        '-filter-string':{ type:'text',   id:'filterString' },
+        '-fe':           { type:'text',   id:'filterRegex' },
+        '-filter-regex': { type:'text',   id:'filterRegex' },
+        '-fcdn':         { type:'text',   id:'filterCdn' },
+        '-filter-cdn':   { type:'text',   id:'filterCdn' },
+        '-frt':          { type:'text',   id:'filterResponseTime' },
+        '-filter-response-time':{ type:'text', id:'filterResponseTime' },
+        '-fdc':          { type:'text',   id:'filterCondition' },
+        '-filter-condition':{ type:'text', id:'filterCondition' },
+        '-strip':        { type:'select', id:'strip' },
+        '-fep':          { type:'check',  id:'filterErrorPage' },
+        '-filter-error-page':{ type:'check', id:'filterErrorPage' },
+        '-fd':           { type:'check',  id:'filterDuplicates' },
+        '-filter-duplicates':{ type:'check', id:'filterDuplicates' },
+
+        // ── RATE LIMIT ──
+        '-t':            { type:'text',   id:'threads' },
+        '-threads':      { type:'text',   id:'threads' },
+        '-rl':           { type:'text',   id:'rateLimit' },
+        '-rate-limit':   { type:'text',   id:'rateLimit' },
+        '-rlm':          { type:'text',   id:'rateLimitMinute' },
+        '-rate-limit-minute':{ type:'text', id:'rateLimitMinute' },
+
+        // ── OUTPUT ──
+        '-o':            { type:'text',   id:'outputFile' },
+        '-output':       { type:'text',   id:'outputFile' },
+        '-oa':           { type:'text',   id:'outputAll' },
+        '-output-all':   { type:'text',   id:'outputAll' },
+        '-sr':           { type:'check',  id:'storeResponse' },
+        '-store-response':{ type:'check', id:'storeResponse' },
+        '-srd':          { type:'text',   id:'storeResponseDir' },
+        '-store-response-dir':{ type:'text', id:'storeResponseDir' },
+        '-ob':           { type:'check',  id:'omitBody' },
+        '-omit-body':    { type:'check',  id:'omitBody' },
+        '-csv':          { type:'check',  id:'csv' },
+        '-csvo':         { type:'text',   id:'csvEncoding' },
+        '-csv-output-encoding':{ type:'text', id:'csvEncoding' },
+        '-j':            { type:'check',  id:'json' },
+        '-json':         { type:'check',  id:'json' },
+        '-irh':          { type:'check',  id:'includeResponseHeader' },
+        '-include-response-header':{ type:'check', id:'includeResponseHeader' },
+        '-irr':          { type:'check',  id:'includeResponse' },
+        '-include-response':{ type:'check', id:'includeResponse' },
+        '-irrb':         { type:'check',  id:'includeResponseBase64' },
+        '-include-response-base64':{ type:'check', id:'includeResponseBase64' },
+        '-include-chain':{ type:'check',  id:'includeChain' },
+        '-store-chain':  { type:'check',  id:'storeChain' },
+        '-svrc':         { type:'check',  id:'storeVisionRecon' },
+        '-store-vision-recon-cluster':{ type:'check', id:'storeVisionRecon' },
+        '-pr':           { type:'select', id:'protocol' },
+        '-protocol':     { type:'select', id:'protocol' },
+        '-fepp':         { type:'text',   id:'filterErrorPagePath' },
+        '-filter-error-page-path':{ type:'text', id:'filterErrorPagePath' },
+        '-lof':          { type:'check',  id:'listOutputFields' },
+        '-list-output-fields':{ type:'check', id:'listOutputFields' },
+        '-eof':          { type:'text',   id:'excludeFields' },
+        '-exclude-output-fields':{ type:'text', id:'excludeFields' },
+
+        // ── CONFIGURATION ──
+        '-config':       { type:'text',   id:'configFile' },
+        '-r':            { type:'text',   id:'resolvers' },
+        '-resolvers':    { type:'text',   id:'resolvers' },
+        '-allow':        { type:'text',   id:'allow' },
+        '-deny':         { type:'text',   id:'deny' },
+        '-sni':          { type:'text',   id:'sniName' },
+        '-sni-name':     { type:'text',   id:'sniName' },
+        '-H':            { type:'multiH', id:'headers' },
+        '-header':       { type:'multiH', id:'headers' },
+        '-proxy':        { type:'text',   id:'proxy' },
+        '-http-proxy':   { type:'text',   id:'proxy' },
+        '-x':            { type:'text',   id:'methods' },
+        '-body':         { type:'text',   id:'body' },
+        '-maxr':         { type:'text',   id:'maxRedirects' },
+        '-max-redirects':{ type:'text',   id:'maxRedirects' },
+        '-sf':           { type:'text',   id:'secretFile' },
+        '-secret-file':  { type:'text',   id:'secretFile' },
+        '-hae':          { type:'text',   id:'httpApiEndpoint' },
+        '-http-api-endpoint':{ type:'text', id:'httpApiEndpoint' },
+        '-random-agent': { type:'check',  id:'randomAgent' },
+        '-auto-referer': { type:'check',  id:'autoReferer' },
+        '-unsafe':       { type:'check',  id:'unsafe' },
+        '-resume':       { type:'check',  id:'resume' },
+        '-fr':           { type:'check',  id:'followRedirects' },
+        '-follow-redirects':{ type:'check', id:'followRedirects' },
+        '-fhr':          { type:'check',  id:'followHostRedirects' },
+        '-follow-host-redirects':{ type:'check', id:'followHostRedirects' },
+        '-rhsts':        { type:'check',  id:'respectHsts' },
+        '-respect-hsts': { type:'check',  id:'respectHsts' },
+        '-vhost-input':  { type:'check',  id:'vhostInput' },
+        '-s':            { type:'check',  id:'stream' },
+        '-stream':       { type:'check',  id:'stream' },
+        '-sd':           { type:'check',  id:'skipDedupe' },
+        '-skip-dedupe':  { type:'check',  id:'skipDedupe' },
+        '-ldp':          { type:'check',  id:'leaveDefaultPorts' },
+        '-leave-default-ports':{ type:'check', id:'leaveDefaultPorts' },
+        '-ztls':         { type:'check',  id:'ztls' },
+        '-no-decode':    { type:'check',  id:'noDecode' },
+        '-tlsi':         { type:'check',  id:'tlsImpersonate' },
+        '-tls-impersonate':{ type:'check', id:'tlsImpersonate' },
+        '-no-stdin':     { type:'check',  id:'noStdin' },
+
+        // ── HEADLESS ──
+        '-ss':           { type:'check',  id:'screenshot' },
+        '-screenshot':   { type:'check',  id:'screenshot' },
+        '-system-chrome':{ type:'check',  id:'systemChrome' },
+        '-ho':           { type:'multi',  id:'headlessOptions' },
+        '-headless-options':{ type:'multi', id:'headlessOptions' },
+        '-esb':          { type:'check',  id:'excludeScreenshotBytes' },
+        '-exclude-screenshot-bytes':{ type:'check', id:'excludeScreenshotBytes' },
+        '-no-screenshot-full-page':{ type:'check', id:'noScreenshotFullPage' },
+        '-ehb':          { type:'check',  id:'excludeHeadlessBody' },
+        '-exclude-headless-body':{ type:'check', id:'excludeHeadlessBody' },
+        '-st':           { type:'text',   id:'screenshotTimeout' },
+        '-screenshot-timeout':{ type:'text', id:'screenshotTimeout' },
+        '-sid':          { type:'text',   id:'screenshotIdle' },
+        '-screenshot-idle':{ type:'text', id:'screenshotIdle' },
+        '-jsc':          { type:'multi',  id:'javascriptCode' },
+        '-javascript-code':{ type:'multi', id:'javascriptCode' },
+
+        // ── MISCELLANEOUS ──
+        '-pa':           { type:'check',  id:'probeAllIps' },
+        '-probe-all-ips':{ type:'check',  id:'probeAllIps' },
+        '-p':            { type:'text',   id:'ports' },
+        '-ports':        { type:'text',   id:'ports' },
+        '-path':         { type:'text',   id:'path' },
+        '-tls-probe':    { type:'check',  id:'tlsProbe' },
+        '-csp-probe':    { type:'check',  id:'cspProbe' },
+        '-tls-grab':     { type:'check',  id:'tlsGrab' },
+        '-pipeline':     { type:'check',  id:'pipeline' },
+        '-http2':        { type:'check',  id:'http2' },
+        '-vhost':        { type:'check',  id:'vhost' },
+        '-ldv':          { type:'check',  id:'listDslVariables' },
+        '-list-dsl-variables':{ type:'check', id:'listDslVariables' },
+        '-er':           { type:'text',   id:'extractRegex' },
+        '-extract-regex':{ type:'text',   id:'extractRegex' },
+        '-ep':           { type:'text',   id:'extractPreset' },
+        '-extract-preset':{ type:'text',  id:'extractPreset' },
+
+        // ── CLOUD ──
+        '-auth':         { type:'check',  id:'auth' },
+        '-ac':           { type:'text',   id:'authConfig' },
+        '-auth-config':  { type:'text',   id:'authConfig' },
+        '-pd':           { type:'check',  id:'dashboard' },
+        '-dashboard':    { type:'check',  id:'dashboard' },
+        '-tid':          { type:'text',   id:'teamId' },
+        '-team-id':      { type:'text',   id:'teamId' },
+        '-aid':          { type:'text',   id:'assetId' },
+        '-asset-id':     { type:'text',   id:'assetId' },
+        '-aname':        { type:'text',   id:'assetName' },
+        '-asset-name':   { type:'text',   id:'assetName' },
+
+        // ── DEBUG ──
+        '-hc':           { type:'check',  id:'healthCheck' },
+        '-health-check': { type:'check',  id:'healthCheck' },
+        '-debug':        { type:'check',  id:'debug' },
+        '-debug-req':    { type:'check',  id:'debugReq' },
+        '-debug-resp':   { type:'check',  id:'debugResp' },
+        '-version':      { type:'check',  id:'version' },
+        '-stats':        { type:'check',  id:'stats' },
+        '-profile-mem':  { type:'text',   id:'profileMem' },
+        '-silent':       { type:'check',  id:'silent' },
+        '-v':            { type:'check',  id:'verbose' },
+        '-verbose':      { type:'check',  id:'verbose' },
+        '-si':           { type:'text',   id:'statsInterval' },
+        '-stats-interval':{ type:'text',  id:'statsInterval' },
+        '-nc':           { type:'check',  id:'noColor' },
+        '-no-color':     { type:'check',  id:'noColor' },
+        '-tr':           { type:'check',  id:'trace' },
+        '-trace':        { type:'check',  id:'trace' },
+
+        // ── OPTIMISATION ──
+        '-nf':           { type:'check',  id:'noFallback' },
+        '-no-fallback':  { type:'check',  id:'noFallback' },
+        '-nfs':          { type:'check',  id:'noFallbackScheme' },
+        '-no-fallback-scheme':{ type:'check', id:'noFallbackScheme' },
+        '-maxhr':        { type:'text',   id:'maxHostError' },
+        '-max-host-error':{ type:'text',  id:'maxHostError' },
+        '-e':            { type:'text',   id:'exclude' },
+        '-exclude':      { type:'text',   id:'exclude' },
+        '-retries':      { type:'text',   id:'retries' },
+        '-timeout':      { type:'text',   id:'timeout' },
+        '-delay':        { type:'text',   id:'delay' },
+        '-rsts':         { type:'text',   id:'responseSizeToSave' },
+        '-response-size-to-save':{ type:'text', id:'responseSizeToSave' },
+        '-rstr':         { type:'text',   id:'responseSizeToRead' },
+        '-response-size-to-read':{ type:'text', id:'responseSizeToRead' },
+        '-up':           { type:'check',  id:'update' },
+        '-update':       { type:'check',  id:'update' },
+        '-duc':          { type:'check',  id:'disableUpdateCheck' },
+        '-disable-update-check':{ type:'check', id:'disableUpdateCheck' },
+    };
+
+    /* flags that consume a following value token (not boolean) */
+    const VALUE_FLAGS = new Set(Object.keys(FLAG_MAP).filter(k => FLAG_MAP[k].type !== 'check'));
+
+    /*
+     * Main loader: clear every field, then walk tokens and fill.
+     */
+    function koroLoadRaw() {
+        const raw = document.getElementById('koroRawInput').value.trim();
+        if (!raw) { showToast('⚠️ Paste a command first.'); return; }
+
+        // strip leading "httpx" or piped prefix like "cat file |  httpx"
+        let cleaned = raw.replace(/^.*?\bhttpx\b\s*/i, '');
+
+        // clear all fields (but keep koroRawInput)
+        const savedRaw = raw;
+        clearAll();
+        document.getElementById('koroRawInput').value = savedRaw;
+
+        const tokens = tokenise(cleaned);
+        let loaded = 0;
+
+        for (let i = 0; i < tokens.length; i++) {
+            const token = tokens[i];
+            if (!token.startsWith('-')) continue;   // skip bare values
+
+            const mapping = FLAG_MAP[token];
+            if (!mapping) continue;                 // unknown flag – skip
+
+            const el = document.getElementById(mapping.id);
+            if (!el) continue;
+
+            switch (mapping.type) {
+                case 'check':
+                    el.checked = true;
+                    loaded++;
+                    break;
+
+                case 'text': {
+                    const val = (i + 1 < tokens.length && !tokens[i+1].startsWith('-'))
+                                ? tokens[++i] : '';
+                    if (val) { el.value = val; loaded++; }
+                    break;
+                }
+
+                case 'select': {
+                    const val = (i + 1 < tokens.length && !tokens[i+1].startsWith('-'))
+                                ? tokens[++i] : '';
+                    if (val) {
+                        // try to find a matching <option>
+                        const opts = Array.from(el.options).map(o => o.value);
+                        if (opts.includes(val)) { el.value = val; loaded++; }
+                    }
+                    break;
+                }
+
+                case 'multi': {
+                    // -u, -ho, -jsc  → append value as new line
+                    const val = (i + 1 < tokens.length && !tokens[i+1].startsWith('-'))
+                                ? tokens[++i] : '';
+                    if (val) {
+                        el.value = el.value ? el.value + '\n' + val : val;
+                        loaded++;
+                    }
+                    break;
+                }
+
+                case 'multiH': {
+                    // -H  →  header lines
+                    const val = (i + 1 < tokens.length && !tokens[i+1].startsWith('-'))
+                                ? tokens[++i] : '';
+                    if (val) {
+                        el.value = el.value ? el.value + '\n' + val : val;
+                        loaded++;
+                    }
+                    break;
+                }
+            }
+        }
+
+        generateCommand();
+        showToast(loaded > 0
+            ? `📥 Loaded ${loaded} flag${loaded > 1 ? 's' : ''} into fields!`
+            : '⚠️ No recognised flags found.');
+    }
+
+    /* async clipboard paste helper */
+    async function koroFromClipboard() {
+        try {
+            const text = await navigator.clipboard.readText();
+            if (text.trim()) {
+                document.getElementById('koroRawInput').value = text.trim();
+                showToast('📋 Pasted from clipboard — hit Load!');
+            } else {
+                showToast('⚠️ Clipboard is empty.');
+            }
+        } catch (e) {
+            showToast('⚠️ Clipboard access denied.');
+        }
+    }
+
 
     // ─────────────────────────────────────────────
     //  INIT
