@@ -285,6 +285,18 @@
             border-color: var(--accent-primary);
             box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
         }
+        /* Disabled state styling */
+        input[type="text"]:disabled,
+        input[type="number"]:disabled,
+        textarea:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            background: var(--bg-primary);
+            border-color: var(--text-muted);
+        }
+        .form-group.disabled label {
+            opacity: 0.4;
+        }
         textarea {
             resize: vertical;
             min-height: 100px;
@@ -750,7 +762,7 @@
                             <span data-en="Basic Commands" data-bn="বেসিক কমান্ড">Basic Commands</span>
                         </h2>
                         <div class="form-grid">
-                            <div class="form-group">
+                            <div class="form-group" id="domainGroup">
                                 <label data-en="Target Domain (-d)" data-bn="টার্গেট ডোমেইন (-d)">Target Domain (-d)</label>
                                 <input type="text" id="domain" placeholder="example.com">
                                 <span class="help-text" data-en="Single domain to enumerate" data-bn="এনুমারেট করার জন্য একক ডোমেইন">Single domain to enumerate</span>
@@ -760,7 +772,7 @@
                                 <input type="text" id="domainList" placeholder="domains.txt">
                                 <span class="help-text" data-en="File containing domains (one per line)" data-bn="ডোমেইন সম্বলিত ফাইল (প্রতি লাইনে একটি)">File containing domains (one per line)</span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="multipleDomainsGroup">
                                 <label data-en="Multiple Domains" data-bn="একাধিক ডোমেইন">Multiple Domains</label>
                                 <textarea id="multipleDomains" placeholder="example.com&#10;test.com&#10;target.org"></textarea>
                                 <span class="help-text" data-en="Multiple domains (one per line)" data-bn="একাধিক ডোমেইন (প্রতি লাইনে একটি)">Multiple domains (one per line)</span>
@@ -1081,6 +1093,46 @@
                 }
             }, 250);
         });
+
+        // Mutual exclusion: domain (-d) vs Multiple Domains textarea
+        const domainInput = document.getElementById('domain');
+        const multipleDomainsInput = document.getElementById('multipleDomains');
+        const domainGroup = document.getElementById('domainGroup');
+        const multipleDomainsGroup = document.getElementById('multipleDomainsGroup');
+
+        function updateMutualExclusion() {
+            const domainHasValue = domainInput.value.trim() !== '';
+            const multipleHasValue = multipleDomainsInput.value.trim() !== '';
+
+            if (domainHasValue) {
+                // domain has text → disable textarea
+                multipleDomainsInput.disabled = true;
+                multipleDomainsGroup.classList.add('disabled');
+            } else {
+                multipleDomainsInput.disabled = false;
+                multipleDomainsGroup.classList.remove('disabled');
+            }
+
+            if (multipleHasValue) {
+                // textarea has text → disable domain input
+                domainInput.disabled = true;
+                domainGroup.classList.add('disabled');
+            } else {
+                domainInput.disabled = false;
+                domainGroup.classList.remove('disabled');
+            }
+        }
+
+        domainInput.addEventListener('input', () => {
+            updateMutualExclusion();
+            generateCommand();
+        });
+
+        multipleDomainsInput.addEventListener('input', () => {
+            updateMutualExclusion();
+            generateCommand();
+        });
+
         function generateCommand() {
             let command = 'amass';
           
@@ -1181,7 +1233,9 @@
                 } else {
                     input.value = '';
                 }
+                input.disabled = false;
             });
+            document.querySelectorAll('.form-group').forEach(g => g.classList.remove('disabled'));
             document.querySelectorAll('input[type="checkbox"]').forEach(input => {
                 input.checked = false;
             });
@@ -1191,6 +1245,7 @@
         function loadExample() {
             clearAll();
             document.getElementById('domain').value = 'example.com';
+            updateMutualExclusion();
             document.getElementById('passive').checked = true;
             document.getElementById('recursive').checked = true;
             document.getElementById('silent').checked = true;
@@ -1213,10 +1268,13 @@
                 setTimeout(() => toast.remove(), 300);
             }, 2000);
         }
+        // Attach generateCommand to all inputs EXCEPT domain and multipleDomains (already handled above)
         const inputs = document.querySelectorAll('input, select, textarea');
         inputs.forEach(input => {
-            input.addEventListener('input', generateCommand);
-            input.addEventListener('change', generateCommand);
+            if (input.id !== 'domain' && input.id !== 'multipleDomains') {
+                input.addEventListener('input', generateCommand);
+                input.addEventListener('change', generateCommand);
+            }
         });
         generateCommand();
     </script>
