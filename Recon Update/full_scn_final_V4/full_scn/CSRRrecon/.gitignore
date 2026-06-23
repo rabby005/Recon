@@ -1,0 +1,21 @@
+#Ignoring output directories
+Recon/
+output/
+.obsidian/
+test/
+.trunk/
+.vscode/
+.cache/
+
+#Ignoring compressed files
+*.tar
+*.tar.*
+*.zip
+.DS_Store
+CSRRrecon.cfg-personal
+secrets.cfg
+.env.cache/
+documentation/
+
+# Vendored wordlists that are stored compressed in-repo (expanded on-demand)
+data/wordlists/subdomains.txt
