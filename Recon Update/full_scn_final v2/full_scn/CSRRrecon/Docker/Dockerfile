@@ -1,0 +1,162 @@
+# syntax=docker/dockerfile:1.4
+
+## Secrets should be passed at runtime, not build time:
+##   docker run -e COLLAB_SERVER=xxx -e XSS_SERVER=xxx -e SHODAN_API_KEY=xxx ...
+
+ARG LANG=en_US.UTF-8
+ARG LANGUAGE=en_US
+
+##################################################
+###> Do NOT change anything beyond this point <###
+##################################################
+
+FROM ubuntu:24.04 AS base
+
+# NOTE: This image intentionally runs as root. Some recon tooling relies on privileged operations
+# (e.g., raw sockets/capabilities) and is commonly executed with elevated permissions.
+
+LABEL org.label-schema.name='CSRRrecon'
+LABEL org.label-schema.description='A simple script for full recon'
+LABEL org.label-schema.usage='https://github.com/six2dez/CSRRrecon'
+LABEL org.label-schema.url='https://github.com/six2dez/CSRRrecon'
+LABEL org.label-schema.docker.cmd.devel='docker run --rm -ti six2dez/CSRRrecon'
+LABEL MAINTAINER="six2dez"
+
+ARG LANG
+ARG LANGUAGE
+
+ARG GIT_REPOSITORY_AXIOM="https://github.com/attacksurge/ax.git"
+ARG GIT_REPOSITORY_CSRRrecon="https://github.com/six2dez/CSRRrecon"
+ARG INSTALL_AXIOM=true
+
+ENV LANG=$LANG
+ENV LANGUAGE=$LANGUAGE
+ENV LC_ALL=$LANG
+
+ENV GIT_REPOSITORY_AXIOM=$GIT_REPOSITORY_AXIOM
+ENV GIT_REPOSITORY_CSRRrecon=$GIT_REPOSITORY_CSRRrecon
+
+ENV INSTALL_AXIOM=$INSTALL_AXIOM
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN=true
+
+ENV GOROOT='/usr/local/go'
+ENV GOPATH='/root/go'
+ENV AXIOMPATH='/root/.axiom/interact'
+ENV CARGOPATH='/root/.cargo/bin'
+ENV PATH="${GOROOT}/bin:${GOPATH}/bin:${AXIOMPATH}:${CARGOPATH}:${PATH}"
+
+SHELL [ "/bin/bash", "-c" ]
+
+COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+RUN <<eot
+#!/bin/bash
+set -euxo pipefail
+
+###>> Backup .bashrc <<###
+cp /root/.bashrc /root/original.bashrc
+
+###>> System Configuration <<###
+apt clean all
+apt update
+apt full-upgrade -f -y --allow-downgrades
+apt install -y --no-install-recommends apt-utils ca-certificates curl git lsb-release nano wget vim jq htop net-tools dnsutils nmap python3 unzip whois
+
+###>> Configure Locales <<###
+apt install -y --no-install-recommends locales
+sed -i -- "/${LANG}/s/^# //g" /etc/locale.gen
+dpkg-reconfigure locales
+update-locale LANG=${LANG}
+
+###>> Configure localepurge <<###
+apt install -y --no-install-recommends localepurge
+sed -i -- '/^USE_DPKG/s/^/#/' /etc/locale.nopurge
+dpkg-reconfigure localepurge
+localepurge
+
+###>> Configure Axiom <<###
+if [ "${INSTALL_AXIOM}" = "true" ]; then
+    mkdir -p /root/.axiom/
+    git clone ${GIT_REPOSITORY_AXIOM} /root/.axiom/
+    cd /root/.axiom/interact
+    ./axiom-configure --unattended --shell Bash || echo "Axiom configure failed or was skipped; continue without cloud fleet."
+    ## This avoids useless error messages later.
+    touch /root/.axiom/axiom.json
+    touch /root/.axiom/interact/includes/functions.sh
+else
+    echo "INSTALL_AXIOM=${INSTALL_AXIOM}; skipping Axiom tooling."
+fi
+
+###>> Install CSRRrecon <<###
+mkdir -p /root/Tools
+mkdir -p /CSRRrecon
+git clone ${GIT_REPOSITORY_CSRRrecon} /CSRRrecon
+cd /CSRRrecon
+sh -c 'echo 1 | ./install.sh'
+
+###>> Restore .bashrc <<###
+mv /root/original.bashrc /root/.bashrc
+find /root -type f \( -name '.bashrc*' -not -name '.bashrc' \) -delete
+
+###>> Clean up <<###
+apt update
+apt remove --purge -y build-essential
+apt autoremove -y
+apt clean all
+find /var/lib/apt/lists -type f -delete
+find /var/cache -type f -delete
+find /var/log -type f -delete
+find /tmp -type f -delete
+rm -rf /root/.cache
+rm -rf /root/go/pkg /root/go/src
+eot
+
+COPY github_tokens.txt /root/Tools/.github_tokens
+COPY notify.conf /root/.config/notify/provider-config.yaml
+
+###>> Configure Axiom Provider <<###
+RUN <<eot
+#!/bin/bash
+set -euxo pipefail
+if [ "${INSTALL_AXIOM}" = "true" ]; then
+    apt update && apt install -y --no-install-recommends openssh-client
+
+    mkdir -p /root/.ssh
+    mkdir -p /root/.axiom/configs
+
+    apt remove --purge -y openssh-client && apt autoremove -y && apt clean all
+    find /var/lib/apt/lists -type f -delete
+    find /var/cache -type f -delete
+    find /var/log -type f -delete
+    find /tmp -type f -delete
+    rm -rf /root/.cache
+else
+    echo "INSTALL_AXIOM=${INSTALL_AXIOM}; skipping Axiom provider setup."
+fi
+eot
+
+#COPY axiom-config.ini /root/.axiom/configs/config.ini
+#COPY axiom-custom-provider.json /root/.axiom/accounts/personal.json
+RUN if [ "${INSTALL_AXIOM}" = "true" ]; then axiom-account personal || echo "Axiom account not configured; provide provider config to enable it."; fi
+# RUN az group delete --name axiom --yes --no-wait
+
+ # This command exits with return code 1, so leave the '|| :' or the build will fail.
+# COPY axiom-custom-provider.json /root/.axiom/accounts/personal.json
+RUN if [ "${INSTALL_AXIOM}" = "true" ]; then axiom-build CSRRrecon || :; fi
+
+## Issue 271
+EXPOSE 85-90
+
+WORKDIR /CSRRrecon
+
+HEALTHCHECK --interval=60s --timeout=30s --retries=3 \
+  CMD ./CSRRrecon.sh --health-check || exit 1
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "--help" ]
