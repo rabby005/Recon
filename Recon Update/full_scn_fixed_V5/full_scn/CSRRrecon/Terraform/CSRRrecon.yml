@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: true
+  vars:
+    CSRRrecon_repo: "https://github.com/six2dez/CSRRrecon.git"
+    CSRRrecon_dest: "/opt/CSRRrecon"
+    CSRRrecon_branch_default: "main"
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 86400
+
+    - name: Ensure git is installed (required to clone the repo)
+      ansible.builtin.apt:
+        name: git
+        state: present
+
+    - name: Clone CSRRrecon
+      ansible.builtin.git:
+        repo: "{{ CSRRrecon_repo }}"
+        dest: "{{ CSRRrecon_dest }}"
+        version: "{{ CSRRrecon_branch | default(CSRRrecon_branch_default) }}"
+        update: yes
+
+    - name: Install CSRRrecon dependencies and tools
+      ansible.builtin.command: ./install.sh --verbose
+      args:
+        chdir: "{{ CSRRrecon_dest }}"
+
+    - name: Copy CSRRrecon.cfg
+      ansible.builtin.copy:
+        src: files/CSRRrecon.cfg
+        dest: "{{ CSRRrecon_dest }}/CSRRrecon.cfg"
+        owner: root
+        group: root
+        mode: "0644"
